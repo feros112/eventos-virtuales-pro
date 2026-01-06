@@ -20,7 +20,13 @@ function ClientDate() {
 
 export default function AuthUi({ message }: { message?: string }) {
     const [view, setView] = useState<'login' | 'register'>('login')
-    const { t } = useLanguage()
+    const { t, language } = useLanguage()
+
+    console.log('AuthUi Render', { language, t_exists: !!t })
+
+    if (!t || !t.auth) {
+        return <div className="min-h-screen bg-slate-950 flex items-center justify-center text-white">Loading translations...</div>
+    }
 
     return (
         <div className="min-h-screen relative overflow-hidden font-sans">
