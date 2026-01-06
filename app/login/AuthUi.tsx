@@ -161,24 +161,24 @@ export default function AuthUi({ message }: { message?: string }) {
                                     className="flex items-center gap-2 text-white/70 hover:text-white transition-colors group"
                                 >
                                     <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-                                    <span className="font-bold tracking-widest text-sm">BACK TO LOGIN</span>
+                                    <span className="font-bold tracking-widest text-sm">VOLVER AL ACCESO</span>
                                 </button>
                             </div>
 
                             {/* Center Message */}
                             <div className="relative z-10 my-auto max-w-2xl mt-20 lg:mt-auto">
                                 <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.9] mb-8">
-                                    WELCOME<br />
-                                    TO VIRTUAL
+                                    BIENVENIDO<br />
+                                    A VIRTUAL
                                 </h1>
                                 <p className="text-lg md:text-xl text-indigo-100 font-light max-w-lg leading-relaxed border-l-4 border-cyan-400 pl-6">
-                                    Join the ultimate immersive experience. Create your account to access exclusive events.
+                                    Únete a la experiencia inmersiva definitiva. Crea tu cuenta para acceder a eventos exclusivos.
                                 </p>
                             </div>
 
                             {/* Logo Watermark */}
                             <div className="absolute bottom-[-5%] right-[-5%] text-9xl font-black text-white/5 tracking-tighter select-none pointer-events-none">
-                                REGISTER
+                                REGISTRO
                             </div>
                         </div>
 
@@ -186,31 +186,31 @@ export default function AuthUi({ message }: { message?: string }) {
                         <div className="lg:w-[35%] bg-[#2e1065] text-white flex flex-col relative z-20 -mt-10 lg:mt-0 rounded-t-[40px] lg:rounded-none lg:rounded-tl-[60px] shadow-[-20px_0_60px_rgba(0,0,0,0.5)] overflow-y-auto">
                             <div className="p-8 md:p-12 flex-1 relative">
                                 <div className="mb-8">
-                                    <h2 className="text-3xl font-bold mb-1">REGISTRATION</h2>
+                                    <h2 className="text-3xl font-bold mb-1">REGISTRO</h2>
                                     <div className="h-1 w-20 bg-cyan-400 rounded-full" />
                                 </div>
 
                                 <form className="space-y-6">
                                     {/* Account Info */}
                                     <div className="space-y-4">
-                                        <h3 className="text-xs font-bold text-indigo-300 uppercase tracking-wider border-b border-indigo-500/30 pb-2">Account Credentials</h3>
+                                        <h3 className="text-xs font-bold text-indigo-300 uppercase tracking-wider border-b border-indigo-500/30 pb-2">Credenciales de Cuenta</h3>
                                         <div className="grid grid-cols-1 gap-3">
-                                            <input name="email" type="email" placeholder="Email Address*" required className="w-full bg-white text-slate-900 placeholder:text-slate-400 px-4 py-3 rounded text-sm font-bold outline-none focus:ring-2 focus:ring-cyan-400" />
+                                            <input name="email" type="email" placeholder="Correo Electrónico*" required className="w-full bg-white text-slate-900 placeholder:text-slate-400 px-4 py-3 rounded text-sm font-bold outline-none focus:ring-2 focus:ring-cyan-400" />
                                             <div className="grid grid-cols-2 gap-3">
-                                                <input name="password" type="password" placeholder="Password*" required className="w-full bg-white text-slate-900 placeholder:text-slate-400 px-4 py-3 rounded text-sm font-bold outline-none focus:ring-2 focus:ring-cyan-400" />
-                                                <input type="password" placeholder="Confirm*" className="w-full bg-white text-slate-900 placeholder:text-slate-400 px-4 py-3 rounded text-sm font-bold outline-none focus:ring-2 focus:ring-cyan-400" />
+                                                <input name="password" type="password" placeholder="Contraseña*" required className="w-full bg-white text-slate-900 placeholder:text-slate-400 px-4 py-3 rounded text-sm font-bold outline-none focus:ring-2 focus:ring-cyan-400" />
+                                                <input type="password" placeholder="Confirmar*" className="w-full bg-white text-slate-900 placeholder:text-slate-400 px-4 py-3 rounded text-sm font-bold outline-none focus:ring-2 focus:ring-cyan-400" />
                                             </div>
                                         </div>
                                     </div>
 
                                     {/* Personal Info */}
                                     <div className="space-y-4">
-                                        <h3 className="text-xs font-bold text-indigo-300 uppercase tracking-wider border-b border-indigo-500/30 pb-2">Profile Details</h3>
+                                        <h3 className="text-xs font-bold text-indigo-300 uppercase tracking-wider border-b border-indigo-500/30 pb-2">Detalles del Perfil</h3>
                                         <div className="grid grid-cols-2 gap-3">
-                                            <input type="text" placeholder="First Name" className="w-full bg-white/90 text-slate-900 placeholder:text-slate-400 px-4 py-3 rounded text-sm outline-none focus:ring-2 focus:ring-cyan-400" />
-                                            <input type="text" placeholder="Last Name" className="w-full bg-white/90 text-slate-900 placeholder:text-slate-400 px-4 py-3 rounded text-sm outline-none focus:ring-2 focus:ring-cyan-400" />
+                                            <input type="text" placeholder="Nombre" className="w-full bg-white/90 text-slate-900 placeholder:text-slate-400 px-4 py-3 rounded text-sm outline-none focus:ring-2 focus:ring-cyan-400" />
+                                            <input type="text" placeholder="Apellido" className="w-full bg-white/90 text-slate-900 placeholder:text-slate-400 px-4 py-3 rounded text-sm outline-none focus:ring-2 focus:ring-cyan-400" />
                                         </div>
-                                        <input type="text" placeholder="Company / Organization" className="w-full bg-white/90 text-slate-900 placeholder:text-slate-400 px-4 py-3 rounded text-sm outline-none focus:ring-2 focus:ring-cyan-400" />
+                                        <input type="text" placeholder="Empresa / Organización" className="w-full bg-white/90 text-slate-900 placeholder:text-slate-400 px-4 py-3 rounded text-sm outline-none focus:ring-2 focus:ring-cyan-400" />
                                     </div>
 
                                     {message && (
@@ -224,10 +224,10 @@ export default function AuthUi({ message }: { message?: string }) {
                                             formAction={signup}
                                             className="w-full py-4 bg-cyan-400 hover:bg-cyan-300 text-slate-900 font-black text-sm uppercase tracking-widest rounded shadow-[0_0_30px_rgba(34,211,238,0.4)] transition-all hover:scale-[1.02]"
                                         >
-                                            Complete Registration
+                                            COMPLETAR REGISTRO
                                         </button>
                                         <p className="text-center text-xs text-indigo-300 mt-4">
-                                            Already have an account? <button type="button" onClick={() => setView('login')} className="text-white hover:text-cyan-400 underline font-bold">Sign In</button>
+                                            ¿Ya tienes cuenta? <button type="button" onClick={() => setView('login')} className="text-white hover:text-cyan-400 underline font-bold">Entrar</button>
                                         </p>
                                     </div>
                                 </form>
