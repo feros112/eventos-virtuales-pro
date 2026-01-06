@@ -4,7 +4,7 @@ import { Canvas, useFrame } from '@react-three/fiber'
 import { Text, Float, Stars, Grid, Image, Environment, ContactShadows, Billboard } from '@react-three/drei'
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing'
 import { useRouter } from 'next/navigation'
-import { useState, useMemo, useRef, Suspense } from 'react'
+import React, { useState, useMemo, useRef, Suspense } from 'react'
 import * as THREE from 'three'
 import { Vector3 } from 'three'
 
@@ -83,6 +83,23 @@ function Waypoint({ position, target, onClick }: { position: [number, number, nu
     )
 }
 
+// --- ERROR BOUNDARY FOR 3D CONTENT ---
+class TextureErrorBoundary extends React.Component<{ children: React.ReactNode, fallback: React.ReactNode }, { hasError: boolean }> {
+    constructor(props: any) {
+        super(props)
+        this.state = { hasError: false }
+    }
+    static getDerivedStateFromError() {
+        return { hasError: true }
+    }
+    render() {
+        if (this.state.hasError) {
+            return this.props.fallback
+        }
+        return this.props.children
+    }
+}
+
 // 2. Main Building (Lobby Entrance)
 function MainBuilding() {
     const router = useRouter()
@@ -90,6 +107,7 @@ function MainBuilding() {
 
     return (
         <group position={[0, 0, -25]}>
+            {/* ... (Previous code remains, just wrapping the Image) ... */}
             {/* --- LEFT DECORATIVE WALL (Voronoi Pattern style) --- */}
             <mesh position={[-20, 5, 5]} rotation={[0, Math.PI / 4, 0]}>
                 <boxGeometry args={[10, 15, 1]} />
@@ -188,12 +206,14 @@ function MainBuilding() {
                     <boxGeometry args={[14.2, 7.2, 0.5]} />
                     <meshStandardMaterial color="#000" />
                 </mesh>
-                <Image
-                    url="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=1000"
-                    position={[0, 0, 0.3]}
-                    scale={[14, 7]}
-                    toneMapped={false}
-                />
+                <TextureErrorBoundary fallback={<mesh><planeGeometry args={[14, 7]} /><meshBasicMaterial color="gray" /></mesh>}>
+                    <Image
+                        url="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=1000"
+                        position={[0, 0, 0.3]}
+                        scale={[14, 7]}
+                        toneMapped={false}
+                    />
+                </TextureErrorBoundary>
             </group>
 
             {/* Interior Signage (Visible through glass left) */}
@@ -245,13 +265,15 @@ function StreamingStage({ onOpenVideo }: { onOpenVideo: () => void }) {
                 </mesh>
 
                 {/* Screen Content */}
-                <Image
-                    url="https://images.unsplash.com/photo-1533174072545-e8d4aa97edf9?auto=format&fit=crop&q=80&w=1000"
-                    position={[0, 6, -4.6]}
-                    scale={[12, 6]}
-                    toneMapped={false}
-                    color={hovered ? "#fff" : "#ddd"}
-                />
+                <TextureErrorBoundary fallback={<mesh position={[0, 6, -4.6]}><planeGeometry args={[12, 6]} /><meshBasicMaterial color="#333" /></mesh>}>
+                    <Image
+                        url="https://images.unsplash.com/photo-1533174072545-e8d4aa97edf9?auto=format&fit=crop&q=80&w=1000"
+                        position={[0, 6, -4.6]}
+                        scale={[12, 6]}
+                        toneMapped={false}
+                        color={hovered ? "#fff" : "#ddd"}
+                    />
+                </TextureErrorBoundary>
                 {/* Play Button Overlay (Visual Cue) */}
                 {hovered && (
                     <Float speed={5} floatIntensity={0.2}>
@@ -277,12 +299,14 @@ function StreamingStage({ onOpenVideo }: { onOpenVideo: () => void }) {
                     <boxGeometry args={[3, 8, 0.1]} />
                     <meshStandardMaterial color="#000" />
                 </mesh>
-                <Image
-                    url="https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&q=80&w=1000"
-                    position={[0, 0, 0.1]}
-                    scale={[2.8, 7.8]}
-                    toneMapped={false}
-                />
+                <TextureErrorBoundary fallback={<mesh position={[0, 0, 0.1]}><planeGeometry args={[2.8, 7.8]} /><meshBasicMaterial color="#222" /></mesh>}>
+                    <Image
+                        url="https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&q=80&w=1000"
+                        position={[0, 0, 0.1]}
+                        scale={[2.8, 7.8]}
+                        toneMapped={false}
+                    />
+                </TextureErrorBoundary>
             </group>
 
             <group position={[9, 5, -4]}>
@@ -290,12 +314,14 @@ function StreamingStage({ onOpenVideo }: { onOpenVideo: () => void }) {
                     <boxGeometry args={[3, 8, 0.1]} />
                     <meshStandardMaterial color="#000" />
                 </mesh>
-                <Image
-                    url="https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&q=80&w=1000"
-                    position={[0, 0, 0.1]}
-                    scale={[2.8, 7.8]}
-                    toneMapped={false}
-                />
+                <TextureErrorBoundary fallback={<mesh position={[0, 0, 0.1]}><planeGeometry args={[2.8, 7.8]} /><meshBasicMaterial color="#222" /></mesh>}>
+                    <Image
+                        url="https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&q=80&w=1000"
+                        position={[0, 0, 0.1]}
+                        scale={[2.8, 7.8]}
+                        toneMapped={false}
+                    />
+                </TextureErrorBoundary>
             </group>
         </group>
     )
