@@ -1,9 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
-import { Menu, User, LogOut, MessageSquare, Map, Compass, X } from 'lucide-react'
+import { Menu, User, LogOut, MessageSquare, Map, Compass, X, HelpCircle } from 'lucide-react'
 import QuickNavigation from '../auditorio/QuickNavigation'
+import InstructionsOverlay from './InstructionsOverlay'
 import { clsx } from 'clsx'
 
 // Dynamically import Experience
@@ -16,8 +17,37 @@ const Experience = dynamic(() => import('./Experience'), {
     )
 })
 
+// Video Modal Component
+function VideoModal({ onClose }: { onClose: () => void }) {
+    return (
+        <div className="fixed inset-0 z-30 bg-black/80 flex items-center justify-center p-4 backdrop-blur-sm pt-20">
+            <div className="relative w-full max-w-5xl bg-black rounded-lg overflow-hidden shadow-2xl border border-white/10">
+                <button
+                    onClick={onClose}
+                    className="absolute top-0 right-0 z-10 p-4 bg-black/50 hover:bg-rose-600/80 text-white transition-colors"
+                >
+                    <X className="w-6 h-6" />
+                </button>
+                <div className="aspect-video w-full">
+                    <iframe
+                        width="100%"
+                        height="100%"
+                        src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+                        title="Live Stream"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        className="w-full h-full"
+                    ></iframe>
+                </div>
+            </div>
+        </div>
+    )
+}
+
 export default function LobbyClientWrapper({ userEmail, profile, signOutAction, rooms }: any) {
     const [showQuickNav, setShowQuickNav] = useState(false)
+    const [showInstructions, setShowInstructions] = useState(true)
+    const [showVideoModal, setShowVideoModal] = useState(false)
 
     return (
         <div className="flex flex-col h-screen bg-slate-50 overflow-hidden font-sans">
