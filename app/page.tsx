@@ -34,16 +34,11 @@ export default function Home() {
       <main className="w-full relative flex flex-col items-center justify-center min-h-screen text-center px-4">
 
         {/* Background Image with Overlay */}
+        {/* Background Image with Overlay */}
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-950/50 to-slate-950 z-10" />
-          <Image
-            src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2670&auto=format&fit=crop"
-            alt="Concert Crowd"
-            fill
-            className="object-cover opacity-60 animate-pulse-slow"
-            style={{ animationDuration: '10s' }}
-            priority
-          />
+          {/* Abstract Background instead of Image to prevent load errors */}
+          <div className="w-full h-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-indigo-900/40 via-slate-950 to-slate-950 animate-pulse-slow" style={{ animationDuration: '4s' }} />
         </div>
 
         <div className="relative z-20 max-w-5xl mx-auto mt-20">

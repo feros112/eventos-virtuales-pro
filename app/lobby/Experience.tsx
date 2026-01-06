@@ -84,22 +84,7 @@ function Waypoint({ position, target, onClick }: { position: [number, number, nu
     )
 }
 
-// --- ERROR BOUNDARY FOR 3D CONTENT ---
-class TextureErrorBoundary extends React.Component<{ children: React.ReactNode, fallback: React.ReactNode }, { hasError: boolean }> {
-    constructor(props: any) {
-        super(props)
-        this.state = { hasError: false }
-    }
-    static getDerivedStateFromError() {
-        return { hasError: true }
-    }
-    render() {
-        if (this.state.hasError) {
-            return this.props.fallback
-        }
-        return this.props.children
-    }
-}
+// --- 2. Main Building (Lobby Entrance) ---
 
 // 2. Main Building (Lobby Entrance)
 function MainBuilding() {
