@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { ArrowLeft, MessageSquare, Send, Users, ThumbsUp, Clock } from 'lucide-react'
 import Link from 'next/link'
 import ChatBox from '../ChatBox'
+import MainStageExperience from './MainStageExperience'
 
 
 export default async function AuditorioPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -70,39 +71,9 @@ export default async function AuditorioPage({ params }: { params: Promise<{ slug
             </nav>
 
             <main className="flex-1 flex flex-col md:flex-row h-[0px] min-h-[calc(100vh-60px)]">
-                {/* Main Stage (Video) */}
-                <div className="w-full h-[40vh] md:h-auto md:flex-1 bg-black flex flex-col relative group">
-                    <div className="flex-1 relative w-full h-full flex items-center justify-center bg-black/90">
-                        {config.is_live && config.stream_url ? (
-                            config.stream_url.startsWith('<') ? (
-                                <div
-                                    className="absolute inset-0 w-full h-full [&>iframe]:w-full [&>iframe]:h-full [&>div]:w-full [&>div]:h-full"
-                                    dangerouslySetInnerHTML={{ __html: config.stream_url }}
-                                />
-                            ) : (
-                                <iframe
-                                    width="100%"
-                                    height="100%"
-                                    src={config.stream_url}
-                                    title="Live Stream"
-                                    className="absolute inset-0 w-full h-full object-cover"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowFullScreen
-                                ></iframe>
-                            )
-                        ) : (
-                            // Offline State
-                            <div className="flex flex-col items-center justify-center p-8 text-center">
-                                <div className="w-16 h-16 md:w-24 md:h-24 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center mb-4 md:mb-6 animate-pulse">
-                                    <Clock className="w-8 h-8 md:w-10 md:h-10 text-slate-500" />
-                                </div>
-                                <h2 className="text-xl md:text-2xl font-bold mb-2 text-white">Próximamente</h2>
-                                <p className="text-slate-400 text-xs md:text-base max-w-md">
-                                    {config.stream_title}
-                                </p>
-                            </div>
-                        )}
-                    </div>
+                {/* Main Stage (3D Experience) */}
+                <div className="w-full h-[40vh] md:h-auto md:flex-1 bg-black flex flex-col relative group overflow-hidden">
+                    <MainStageExperience streamUrl={config.stream_url} isLive={config.is_live} />
                 </div>
 
                 {/* Sidebar (Chat & Engagement) */}

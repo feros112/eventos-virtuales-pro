@@ -58,9 +58,9 @@ export default function AuthUi({ message }: { message?: string }) {
 
                             {/* Left Side: Title */}
                             <div className="md:w-1/2 p-10 md:p-16 flex flex-col justify-center bg-white relative">
-                                <h2 className="text-4xl md:text-5xl font-bold text-slate-300 tracking-tighter mb-4">SIGN IN</h2>
+                                <h2 className="text-4xl md:text-5xl font-bold text-slate-300 tracking-tighter mb-4">ACCESO</h2>
                                 <div className="text-5xl md:text-6xl font-black text-slate-900 tracking-tighter leading-none">
-                                    eVENTOS<br />
+                                    EVENTOS<br />
                                     VIRTUALES<br />
                                     <span className="text-blue-600">PRO</span>
                                 </div>
@@ -72,7 +72,7 @@ export default function AuthUi({ message }: { message?: string }) {
 
                                     <div className="grid grid-cols-1 gap-6">
                                         <div className="space-y-2">
-                                            <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Email</label>
+                                            <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">CORREO ELECTRÓNICO</label>
                                             <input
                                                 name="email"
                                                 type="email"
@@ -81,7 +81,7 @@ export default function AuthUi({ message }: { message?: string }) {
                                             />
                                         </div>
                                         <div className="space-y-2">
-                                            <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Password</label>
+                                            <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">CONTRASEÑA</label>
                                             <input
                                                 name="password"
                                                 type="password"
@@ -103,18 +103,18 @@ export default function AuthUi({ message }: { message?: string }) {
                                             onClick={() => setView('register')}
                                             className="flex-1 py-3 px-6 rounded-full border-2 border-blue-600 text-blue-600 font-bold text-xs md:text-sm uppercase tracking-widest hover:bg-blue-50 transition-all text-center"
                                         >
-                                            Create Account
+                                            CREAR CUENTA
                                         </button>
                                         <button
                                             formAction={login}
                                             className="flex-1 py-3 px-6 rounded-full bg-blue-600 text-white font-bold text-xs md:text-sm uppercase tracking-widest hover:bg-blue-700 shadow-xl shadow-blue-500/30 transition-all"
                                         >
-                                            Sign In
+                                            ENTRAR
                                         </button>
                                     </div>
 
                                     <div className="text-center pt-4">
-                                        <a href="#" className="text-xs text-slate-400 hover:text-blue-600 transition-colors font-medium">Forgot Password?</a>
+                                        <a href="#" className="text-xs text-slate-400 hover:text-blue-600 transition-colors font-medium">¿Olvidaste tu contraseña?</a>
                                     </div>
                                 </form>
                             </div>
@@ -122,9 +122,9 @@ export default function AuthUi({ message }: { message?: string }) {
 
                         {/* Footer Links (Absolute Bottom) */}
                         <div className="absolute bottom-6 left-0 w-full flex justify-center md:justify-start md:pl-10 text-[10px] md:text-xs font-bold text-white/50 uppercase tracking-widest gap-4 md:gap-8 z-20">
-                            <Link href="#" className="hover:text-white transition-colors">Legal Notice</Link>
-                            <Link href="#" className="hover:text-white transition-colors">Site Map</Link>
-                            <Link href="#" className="hover:text-white transition-colors">Pro Events</Link>
+                            <Link href="#" className="hover:text-white transition-colors">Aviso Legal</Link>
+                            <Link href="#" className="hover:text-white transition-colors">Mapa del Sitio</Link>
+                            <Link href="#" className="hover:text-white transition-colors">Eventos Pro</Link>
                         </div>
                     </motion.div>
                 )}
