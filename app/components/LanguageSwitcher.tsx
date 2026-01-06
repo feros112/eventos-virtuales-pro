@@ -9,10 +9,11 @@ export default function LanguageSwitcher() {
     return (
         <button
             onClick={toggleLanguage}
-            className="fixed top-4 right-4 z-[60] flex items-center gap-2 bg-black/50 hover:bg-black/70 text-white backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 transition-all group"
+            className="fixed top-5 right-5 z-[9999] flex items-center gap-2 bg-slate-900/80 hover:bg-slate-800 text-white backdrop-blur-md px-4 py-2 rounded-full border-2 border-white/20 shadow-[0_0_20px_rgba(0,0,0,0.5)] transition-all group scale-100 active:scale-95"
+            style={{ position: 'fixed', top: '20px', right: '20px', zIndex: 9999 }}
         >
-            <Globe className="w-4 h-4 text-slate-300 group-hover:text-white" />
-            <span className="text-xs font-bold font-mono">
+            <Globe className="w-4 h-4 text-cyan-400 group-hover:text-cyan-300 animate-pulse" />
+            <span className="text-xs font-black font-mono tracking-widest">
                 {language === 'es' ? 'ES' : 'EN'}
             </span>
         </button>

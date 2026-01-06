@@ -15,7 +15,7 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-    // Default to 'es' but try to read from localStorage
+    // Default to 'es' 
     const [language, setLanguageState] = useState<Language>('es')
     const [mounted, setMounted] = useState(false)
 
@@ -36,15 +36,11 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
         setLanguage(language === 'es' ? 'en' : 'es')
     }
 
-    // Prevent hydration mismatch by defining t based on initial state, 
-    // but actual switching happens after mount or efficiently
     const t = translations[language]
 
-    if (!mounted) {
-        return <>{children}</> // Render children without context initially to avoid mismatch or handle differently
-        // Actually, for context providers, it's often better to render with default to avoid flickering
-        // simpler approach: just render.
-    }
+    // Render children immediately to avoid blocking UI, 
+    // even if language might flip from default 'es' to 'en' after mount.
+    // This is better than returning null.
 
     return (
         <LanguageContext.Provider value={{ language, t, toggleLanguage, setLanguage }}>
@@ -56,15 +52,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 export function useLanguage() {
     const context = useContext(LanguageContext)
     if (context === undefined) {
-        // Fallback if used outside provider (e.g. initial render of some components)
-        // returns default Spanish to avoid crashing, but warns
-        console.warn('useLanguage must be used within a LanguageProvider')
-        return {
-            language: 'es' as Language,
-            t: translations['es'],
-            toggleLanguage: () => { },
-            setLanguage: () => { }
-        }
+        throw new Error('useLanguage must be used within a LanguageProvider')
     }
     return context
 }
