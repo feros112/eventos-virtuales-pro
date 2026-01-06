@@ -34,7 +34,30 @@ export const translations = {
         },
         lobby: {
             enter: "ENTRAR",
-            back: "VOLVER"
+            back: "VOLVER",
+            instructions: {
+                title: "CONTROLES DE NAVEGACIÓN",
+                desktop: "ESCRITORIO",
+                mobile: "MÓVIL",
+                look: "Mirar",
+                move: "Moverse",
+                click: "Interactuar",
+                drag: "Arrastrar",
+                pinch: "Zoom",
+                tap: "Tocar",
+                gotIt: "¡ENTENDIDO!"
+            },
+            rooms: {
+                auditorium: "AUDITORIO",
+                expo: "EXPO HALL",
+                workshops: "TALLERES",
+                networking: "NETWORKING"
+            }
+        },
+        expo: {
+            title: "SALA DE EXPOSICIÓN",
+            visit: "VISITAR",
+            backToLobby: "VOLVER AL LOBBY"
         }
     },
     en: {
@@ -66,7 +89,30 @@ export const translations = {
         },
         lobby: {
             enter: "ENTER",
-            back: "BACK"
+            back: "BACK",
+            instructions: {
+                title: "NAVIGATION CONTROLS",
+                desktop: "DESKTOP",
+                mobile: "MOBILE",
+                look: "Look Around",
+                move: "Move",
+                click: "Interact",
+                drag: "Drag",
+                pinch: "Zoom",
+                tap: "Tap",
+                gotIt: "GOT IT!"
+            },
+            rooms: {
+                auditorium: "AUDITORIUM",
+                expo: "EXPO HALL",
+                workshops: "WORKSHOPS",
+                networking: "NETWORKING"
+            }
+        },
+        expo: {
+            title: "EXPO HALL",
+            visit: "VISIT",
+            backToLobby: "BACK TO LOBBY"
         }
     }
 }
