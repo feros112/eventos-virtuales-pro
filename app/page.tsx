@@ -80,14 +80,11 @@ export default function Home() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 h-[800px] md:h-[600px]">
           {/* Card 1: Large Left */}
-          <div className="md:col-span-2 relative rounded-3xl overflow-hidden border border-white/10 group cursor-pointer">
+          <div className="md:col-span-2 relative rounded-3xl overflow-hidden border border-white/10 group cursor-pointer bg-slate-900">
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10" />
-            <Image
-              src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2670&auto=format&fit=crop"
-              alt="Cyberpunk City"
-              fill
-              className="object-cover transition-transform duration-700 group-hover:scale-105"
-            />
+            {/* Gradient Placeholder */}
+            <div className="absolute inset-0 bg-gradient-to-br from-cyan-900 via-blue-900 to-indigo-900 opacity-60 transition-transform duration-700 group-hover:scale-105" />
+
             <div className="absolute bottom-0 left-0 p-8 z-20">
               <div className="flex items-center gap-2 text-cyan-400 font-bold mb-2">
                 <MonitorPlay className="w-5 h-5" /> STREAMING 4K
@@ -98,14 +95,11 @@ export default function Home() {
           </div>
 
           {/* Card 2: Top Right */}
-          <div className="relative rounded-3xl overflow-hidden border border-white/10 group cursor-pointer">
+          <div className="relative rounded-3xl overflow-hidden border border-white/10 group cursor-pointer bg-slate-900">
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10" />
-            <Image
-              src="https://images.unsplash.com/photo-1533174072545-e8d4aa97edf9?q=80&w=2574&auto=format&fit=crop"
-              alt="Party Crowd"
-              fill
-              className="object-cover transition-transform duration-700 group-hover:scale-105"
-            />
+            {/* Gradient Placeholder */}
+            <div className="absolute inset-0 bg-gradient-to-bl from-purple-900 via-fuchsia-900 to-rose-900 opacity-60 transition-transform duration-700 group-hover:scale-105" />
+
             <div className="absolute bottom-0 left-0 p-6 z-20">
               <div className="flex items-center gap-2 text-purple-400 font-bold mb-2">
                 <Users className="w-5 h-5" /> {t.lobby.rooms.networking}
@@ -115,14 +109,11 @@ export default function Home() {
           </div>
 
           {/* Card 3: Bottom Right */}
-          <div className="relative rounded-3xl overflow-hidden border border-white/10 group cursor-pointer">
+          <div className="relative rounded-3xl overflow-hidden border border-white/10 group cursor-pointer bg-slate-900">
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10" />
-            <Image
-              src="https://images.unsplash.com/photo-1614728853913-1e245bc90e60?q=80&w=2574&auto=format&fit=crop"
-              alt="Neon Abstract"
-              fill
-              className="object-cover transition-transform duration-700 group-hover:scale-105"
-            />
+            {/* Gradient Placeholder */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-emerald-900 via-teal-900 to-cyan-900 opacity-60 transition-transform duration-700 group-hover:scale-105" />
+
             <div className="absolute bottom-0 left-0 p-6 z-20">
               <div className="flex items-center gap-2 text-emerald-400 font-bold mb-2">
                 <Coins className="w-5 h-5" /> ROI
