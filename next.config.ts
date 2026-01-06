@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'images.unsplash.com',
+        // Validating Unsplash domain for external images
       },
     ],
   },

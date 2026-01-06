@@ -2,8 +2,11 @@
 import { ArrowRight, Globe, Lock, Coins, LayoutTemplate, MonitorPlay, Zap, Users } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { useLanguage } from './context/LanguageContext'
 
 export default function Home() {
+  const { t } = useLanguage()
+
   return (
     <div className="min-h-screen flex flex-col items-center bg-slate-950 text-white selection:bg-purple-500 selection:text-white overflow-hidden">
 
@@ -19,7 +22,7 @@ export default function Home() {
         </div>
         <div className="flex gap-4">
           <Link href="/login" className="px-4 py-2 text-sm font-medium text-slate-300 hover:text-white transition-colors backdrop-blur-sm bg-black/30 rounded-full border border-white/5">
-            Iniciar Sesión
+            {t.auth.signInBtn}
           </Link>
           <button className="px-5 py-2 text-sm font-bold bg-white text-black hover:bg-slate-200 rounded-full transition-all shadow-[0_0_20px_rgba(255,255,255,0.3)]">
             Crear Evento
@@ -60,8 +63,8 @@ export default function Home() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-6 w-full justify-center">
-            <Link href="/login" className="group h-14 px-10 rounded-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-lg transition-all flex items-center justify-center gap-3 shadow-[0_0_30px_rgba(79,70,229,0.4)] hover:shadow-[0_0_50px_rgba(79,70,229,0.6)] hover:scale-105">
-              Comenzar Ahora
+            <Link href="/lobby" className="group h-14 px-10 rounded-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-lg transition-all flex items-center justify-center gap-3 shadow-[0_0_30px_rgba(79,70,229,0.4)] hover:shadow-[0_0_50px_rgba(79,70,229,0.6)] hover:scale-105">
+              {t.lobby.enter}
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Link>
             <button className="h-14 px-10 rounded-full bg-white/5 border border-white/10 text-white font-medium hover:bg-white/10 transition-all backdrop-blur-md">
@@ -106,7 +109,7 @@ export default function Home() {
             />
             <div className="absolute bottom-0 left-0 p-6 z-20">
               <div className="flex items-center gap-2 text-purple-400 font-bold mb-2">
-                <Users className="w-5 h-5" /> NETWORKING
+                <Users className="w-5 h-5" /> {t.lobby.rooms.networking}
               </div>
               <h3 className="text-2xl font-bold text-white">Social Hub</h3>
             </div>
