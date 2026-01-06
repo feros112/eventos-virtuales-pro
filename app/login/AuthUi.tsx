@@ -6,17 +6,21 @@ import { login, signup } from './actions'
 import { ArrowLeft, Zap } from 'lucide-react'
 import Link from 'next/link'
 import { clsx } from 'clsx'
+import { useLanguage } from '../context/LanguageContext'
 
 function ClientDate() {
     const [date, setDate] = useState('')
+    const { language } = useLanguage()
+
     useEffect(() => {
-        setDate(new Date().toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: '2-digit' }))
-    }, [])
+        setDate(new Date().toLocaleDateString(language === 'es' ? 'es-ES' : 'en-US', { month: '2-digit', day: '2-digit', year: '2-digit' }))
+    }, [language])
     return <>{date}</>
 }
 
 export default function AuthUi({ message }: { message?: string }) {
     const [view, setView] = useState<'login' | 'register'>('login')
+    const { t } = useLanguage()
 
     return (
         <div className="min-h-screen relative overflow-hidden font-sans">
@@ -58,7 +62,7 @@ export default function AuthUi({ message }: { message?: string }) {
 
                             {/* Left Side: Title */}
                             <div className="md:w-1/2 p-10 md:p-16 flex flex-col justify-center bg-white relative">
-                                <h2 className="text-4xl md:text-5xl font-bold text-slate-300 tracking-tighter mb-4">ACCESO</h2>
+                                <h2 className="text-4xl md:text-5xl font-bold text-slate-300 tracking-tighter mb-4">{t.auth.signInTitle}</h2>
                                 <div className="text-5xl md:text-6xl font-black text-slate-900 tracking-tighter leading-none">
                                     EVENTOS<br />
                                     VIRTUALES<br />
@@ -72,7 +76,7 @@ export default function AuthUi({ message }: { message?: string }) {
 
                                     <div className="grid grid-cols-1 gap-6">
                                         <div className="space-y-2">
-                                            <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">CORREO ELECTRÓNICO</label>
+                                            <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">{t.auth.emailLabel}</label>
                                             <input
                                                 name="email"
                                                 type="email"
@@ -81,7 +85,7 @@ export default function AuthUi({ message }: { message?: string }) {
                                             />
                                         </div>
                                         <div className="space-y-2">
-                                            <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">CONTRASEÑA</label>
+                                            <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">{t.auth.passwordLabel}</label>
                                             <input
                                                 name="password"
                                                 type="password"
@@ -103,18 +107,18 @@ export default function AuthUi({ message }: { message?: string }) {
                                             onClick={() => setView('register')}
                                             className="flex-1 py-3 px-6 rounded-full border-2 border-blue-600 text-blue-600 font-bold text-xs md:text-sm uppercase tracking-widest hover:bg-blue-50 transition-all text-center"
                                         >
-                                            CREAR CUENTA
+                                            {t.auth.createAccountBtn}
                                         </button>
                                         <button
                                             formAction={login}
                                             className="flex-1 py-3 px-6 rounded-full bg-blue-600 text-white font-bold text-xs md:text-sm uppercase tracking-widest hover:bg-blue-700 shadow-xl shadow-blue-500/30 transition-all"
                                         >
-                                            ENTRAR
+                                            {t.auth.signInBtn}
                                         </button>
                                     </div>
 
                                     <div className="text-center pt-4">
-                                        <a href="#" className="text-xs text-slate-400 hover:text-blue-600 transition-colors font-medium">¿Olvidaste tu contraseña?</a>
+                                        <a href="#" className="text-xs text-slate-400 hover:text-blue-600 transition-colors font-medium">{t.auth.forgotPassword}</a>
                                     </div>
                                 </form>
                             </div>
@@ -122,9 +126,9 @@ export default function AuthUi({ message }: { message?: string }) {
 
                         {/* Footer Links (Absolute Bottom) */}
                         <div className="absolute bottom-6 left-0 w-full flex justify-center md:justify-start md:pl-10 text-[10px] md:text-xs font-bold text-white/50 uppercase tracking-widest gap-4 md:gap-8 z-20">
-                            <Link href="#" className="hover:text-white transition-colors">Aviso Legal</Link>
-                            <Link href="#" className="hover:text-white transition-colors">Mapa del Sitio</Link>
-                            <Link href="#" className="hover:text-white transition-colors">Eventos Pro</Link>
+                            <Link href="#" className="hover:text-white transition-colors">{t.auth.footer.legal}</Link>
+                            <Link href="#" className="hover:text-white transition-colors">{t.auth.footer.sitemap}</Link>
+                            <Link href="#" className="hover:text-white transition-colors">{t.auth.footer.proEvents}</Link>
                         </div>
                     </motion.div>
                 )}
@@ -161,24 +165,24 @@ export default function AuthUi({ message }: { message?: string }) {
                                     className="flex items-center gap-2 text-white/70 hover:text-white transition-colors group"
                                 >
                                     <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-                                    <span className="font-bold tracking-widest text-sm">VOLVER AL ACCESO</span>
+                                    <span className="font-bold tracking-widest text-sm">{t.auth.backToLogin}</span>
                                 </button>
                             </div>
 
                             {/* Center Message */}
                             <div className="relative z-10 my-auto max-w-2xl mt-20 lg:mt-auto">
                                 <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.9] mb-8">
-                                    BIENVENIDO<br />
-                                    A VIRTUAL
+                                    {t.auth.welcomeTitle}<br />
+                                    {t.auth.welcomeSubtitle}
                                 </h1>
                                 <p className="text-lg md:text-xl text-indigo-100 font-light max-w-lg leading-relaxed border-l-4 border-cyan-400 pl-6">
-                                    Únete a la experiencia inmersiva definitiva. Crea tu cuenta para acceder a eventos exclusivos.
+                                    {t.auth.welcomeBody}
                                 </p>
                             </div>
 
                             {/* Logo Watermark */}
                             <div className="absolute bottom-[-5%] right-[-5%] text-9xl font-black text-white/5 tracking-tighter select-none pointer-events-none">
-                                REGISTRO
+                                {t.auth.registrationTitle}
                             </div>
                         </div>
 
@@ -186,31 +190,31 @@ export default function AuthUi({ message }: { message?: string }) {
                         <div className="lg:w-[35%] bg-[#2e1065] text-white flex flex-col relative z-20 -mt-10 lg:mt-0 rounded-t-[40px] lg:rounded-none lg:rounded-tl-[60px] shadow-[-20px_0_60px_rgba(0,0,0,0.5)] overflow-y-auto">
                             <div className="p-8 md:p-12 flex-1 relative">
                                 <div className="mb-8">
-                                    <h2 className="text-3xl font-bold mb-1">REGISTRO</h2>
+                                    <h2 className="text-3xl font-bold mb-1">{t.auth.registrationTitle}</h2>
                                     <div className="h-1 w-20 bg-cyan-400 rounded-full" />
                                 </div>
 
                                 <form className="space-y-6">
                                     {/* Account Info */}
                                     <div className="space-y-4">
-                                        <h3 className="text-xs font-bold text-indigo-300 uppercase tracking-wider border-b border-indigo-500/30 pb-2">Credenciales de Cuenta</h3>
+                                        <h3 className="text-xs font-bold text-indigo-300 uppercase tracking-wider border-b border-indigo-500/30 pb-2">{t.auth.accountCreds}</h3>
                                         <div className="grid grid-cols-1 gap-3">
-                                            <input name="email" type="email" placeholder="Correo Electrónico*" required className="w-full bg-white text-slate-900 placeholder:text-slate-400 px-4 py-3 rounded text-sm font-bold outline-none focus:ring-2 focus:ring-cyan-400" />
+                                            <input name="email" type="email" placeholder={`${t.auth.emailLabel}*`} required className="w-full bg-white text-slate-900 placeholder:text-slate-400 px-4 py-3 rounded text-sm font-bold outline-none focus:ring-2 focus:ring-cyan-400" />
                                             <div className="grid grid-cols-2 gap-3">
-                                                <input name="password" type="password" placeholder="Contraseña*" required className="w-full bg-white text-slate-900 placeholder:text-slate-400 px-4 py-3 rounded text-sm font-bold outline-none focus:ring-2 focus:ring-cyan-400" />
-                                                <input type="password" placeholder="Confirmar*" className="w-full bg-white text-slate-900 placeholder:text-slate-400 px-4 py-3 rounded text-sm font-bold outline-none focus:ring-2 focus:ring-cyan-400" />
+                                                <input name="password" type="password" placeholder={`${t.auth.passwordLabel}*`} required className="w-full bg-white text-slate-900 placeholder:text-slate-400 px-4 py-3 rounded text-sm font-bold outline-none focus:ring-2 focus:ring-cyan-400" />
+                                                <input type="password" placeholder={t.auth.confirmPassword} className="w-full bg-white text-slate-900 placeholder:text-slate-400 px-4 py-3 rounded text-sm font-bold outline-none focus:ring-2 focus:ring-cyan-400" />
                                             </div>
                                         </div>
                                     </div>
 
                                     {/* Personal Info */}
                                     <div className="space-y-4">
-                                        <h3 className="text-xs font-bold text-indigo-300 uppercase tracking-wider border-b border-indigo-500/30 pb-2">Detalles del Perfil</h3>
+                                        <h3 className="text-xs font-bold text-indigo-300 uppercase tracking-wider border-b border-indigo-500/30 pb-2">{t.auth.profileDetails}</h3>
                                         <div className="grid grid-cols-2 gap-3">
-                                            <input type="text" placeholder="Nombre" className="w-full bg-white/90 text-slate-900 placeholder:text-slate-400 px-4 py-3 rounded text-sm outline-none focus:ring-2 focus:ring-cyan-400" />
-                                            <input type="text" placeholder="Apellido" className="w-full bg-white/90 text-slate-900 placeholder:text-slate-400 px-4 py-3 rounded text-sm outline-none focus:ring-2 focus:ring-cyan-400" />
+                                            <input type="text" placeholder={t.auth.namePlaceholder} className="w-full bg-white/90 text-slate-900 placeholder:text-slate-400 px-4 py-3 rounded text-sm outline-none focus:ring-2 focus:ring-cyan-400" />
+                                            <input type="text" placeholder={t.auth.lastNamePlaceholder} className="w-full bg-white/90 text-slate-900 placeholder:text-slate-400 px-4 py-3 rounded text-sm outline-none focus:ring-2 focus:ring-cyan-400" />
                                         </div>
-                                        <input type="text" placeholder="Empresa / Organización" className="w-full bg-white/90 text-slate-900 placeholder:text-slate-400 px-4 py-3 rounded text-sm outline-none focus:ring-2 focus:ring-cyan-400" />
+                                        <input type="text" placeholder={t.auth.companyPlaceholder} className="w-full bg-white/90 text-slate-900 placeholder:text-slate-400 px-4 py-3 rounded text-sm outline-none focus:ring-2 focus:ring-cyan-400" />
                                     </div>
 
                                     {message && (
@@ -224,10 +228,10 @@ export default function AuthUi({ message }: { message?: string }) {
                                             formAction={signup}
                                             className="w-full py-4 bg-cyan-400 hover:bg-cyan-300 text-slate-900 font-black text-sm uppercase tracking-widest rounded shadow-[0_0_30px_rgba(34,211,238,0.4)] transition-all hover:scale-[1.02]"
                                         >
-                                            COMPLETAR REGISTRO
+                                            {t.auth.completeRegBtn}
                                         </button>
                                         <p className="text-center text-xs text-indigo-300 mt-4">
-                                            ¿Ya tienes cuenta? <button type="button" onClick={() => setView('login')} className="text-white hover:text-cyan-400 underline font-bold">Entrar</button>
+                                            {t.auth.alreadyAccount} <button type="button" onClick={() => setView('login')} className="text-white hover:text-cyan-400 underline font-bold">{t.auth.signInBtn}</button>
                                         </p>
                                     </div>
                                 </form>
