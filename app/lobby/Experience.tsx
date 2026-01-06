@@ -4,7 +4,7 @@ import { Canvas, useFrame } from '@react-three/fiber'
 import { Text, Float, Stars, Grid, Image, Environment, ContactShadows, Billboard } from '@react-three/drei'
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing'
 import { useRouter } from 'next/navigation'
-import { useState, useMemo, useRef } from 'react'
+import { useState, useMemo, useRef, Suspense } from 'react'
 import * as THREE from 'three'
 import { Vector3 } from 'three'
 
@@ -363,9 +363,11 @@ export default function Experience({ openVideo }: { openVideo?: () => void }) {
                     infiniteGrid
                 />
 
-                {/* --- STRUCTURES --- */}
-                <MainBuilding />
-                <StreamingStage onOpenVideo={openVideo || (() => { })} />
+                {/* --- STRUCTURES (Wrapped in Suspense to prevent texture crash) --- */}
+                <Suspense fallback={null}>
+                    <MainBuilding />
+                    <StreamingStage onOpenVideo={openVideo || (() => { })} />
+                </Suspense>
 
                 {/* --- CROWD --- */}
                 {crowd.map((person, i) => (
