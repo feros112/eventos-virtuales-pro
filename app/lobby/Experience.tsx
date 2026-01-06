@@ -1,4 +1,5 @@
 'use client'
+// Force rebuild - Stability Update v2
 
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Text, Float, Stars, Grid, Environment, ContactShadows, Billboard } from '@react-three/drei'
