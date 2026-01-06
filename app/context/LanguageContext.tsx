@@ -21,7 +21,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
     useEffect(() => {
         const savedLang = localStorage.getItem('language') as Language
-        if (savedLang) {
+        // Strict validation to ensure we only accept valid keys
+        if (savedLang === 'es' || savedLang === 'en') {
             setLanguageState(savedLang)
         }
         setMounted(true)
@@ -36,7 +37,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
         setLanguage(language === 'es' ? 'en' : 'es')
     }
 
-    const t = translations[language]
+    // Safety fallback: ensure t is never undefined
+    const t = translations[language] || translations['es']
 
     // Render children immediately to avoid blocking UI, 
     // even if language might flip from default 'es' to 'en' after mount.
