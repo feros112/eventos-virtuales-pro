@@ -36,11 +36,13 @@ export default function Home() {
         {/* Background Image with Overlay */}
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-950/50 to-slate-950 z-10" />
-          <img
+          <Image
             src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2670&auto=format&fit=crop"
             alt="Concert Crowd"
-            className="w-full h-full object-cover opacity-60 animate-pulse-slow"
+            fill
+            className="object-cover opacity-60 animate-pulse-slow"
             style={{ animationDuration: '10s' }}
+            priority
           />
         </div>
 
@@ -85,10 +87,11 @@ export default function Home() {
           {/* Card 1: Large Left */}
           <div className="md:col-span-2 relative rounded-3xl overflow-hidden border border-white/10 group cursor-pointer">
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10" />
-            <img
+            <Image
               src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2670&auto=format&fit=crop"
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               alt="Cyberpunk City"
+              fill
+              className="object-cover transition-transform duration-700 group-hover:scale-105"
             />
             <div className="absolute bottom-0 left-0 p-8 z-20">
               <div className="flex items-center gap-2 text-cyan-400 font-bold mb-2">
@@ -102,10 +105,11 @@ export default function Home() {
           {/* Card 2: Top Right */}
           <div className="relative rounded-3xl overflow-hidden border border-white/10 group cursor-pointer">
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10" />
-            <img
+            <Image
               src="https://images.unsplash.com/photo-1533174072545-e8d4aa97edf9?q=80&w=2574&auto=format&fit=crop"
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               alt="Party Crowd"
+              fill
+              className="object-cover transition-transform duration-700 group-hover:scale-105"
             />
             <div className="absolute bottom-0 left-0 p-6 z-20">
               <div className="flex items-center gap-2 text-purple-400 font-bold mb-2">
@@ -118,10 +122,11 @@ export default function Home() {
           {/* Card 3: Bottom Right */}
           <div className="relative rounded-3xl overflow-hidden border border-white/10 group cursor-pointer">
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10" />
-            <img
+            <Image
               src="https://images.unsplash.com/photo-1614728853913-1e245bc90e60?q=80&w=2574&auto=format&fit=crop"
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               alt="Neon Abstract"
+              fill
+              className="object-cover transition-transform duration-700 group-hover:scale-105"
             />
             <div className="absolute bottom-0 left-0 p-6 z-20">
               <div className="flex items-center gap-2 text-emerald-400 font-bold mb-2">
