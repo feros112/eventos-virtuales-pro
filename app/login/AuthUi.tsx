@@ -1,11 +1,19 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { login, signup } from './actions'
 import { ArrowLeft, Zap } from 'lucide-react'
 import Link from 'next/link'
 import { clsx } from 'clsx'
+
+function ClientDate() {
+    const [date, setDate] = useState('')
+    useEffect(() => {
+        setDate(new Date().toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: '2-digit' }))
+    }, [])
+    return <>{date}</>
+}
 
 export default function AuthUi({ message }: { message?: string }) {
     const [view, setView] = useState<'login' | 'register'>('login')
@@ -36,13 +44,13 @@ export default function AuthUi({ message }: { message?: string }) {
                             />
                             <div className="absolute inset-0 bg-blue-900/80 mix-blend-multiply" />
                             <div className="absolute top-0 right-0 p-10 lg:p-20 text-blue-200/20 font-black text-6xl md:text-8xl lg:text-9xl tracking-tighter select-none z-0">
-                                06/12/26
+                                <ClientDate />
                             </div>
                         </div>
 
-                        {/* Huge BEYOND TEXT (Background Layer) */}
-                        <div className="absolute left-0 bottom-1/2 translate-y-1/2 md:translate-y-0 md:top-1/2 -translate-x-[10%] text-[20vw] font-black leading-none tracking-tighter text-white/10 select-none z-0 pointer-events-none">
-                            BEYOND
+                        {/* Huge WATERMARK TEXT (Background Layer) */}
+                        <div className="absolute left-0 bottom-1/2 translate-y-1/2 md:translate-y-0 md:top-1/2 -translate-x-[10%] text-[10vw] font-black leading-none tracking-tighter text-white/5 select-none z-0 pointer-events-none whitespace-nowrap">
+                            eVENTOS VIRTUALES PRO
                         </div>
 
                         {/* Floating White Card */}
@@ -50,10 +58,11 @@ export default function AuthUi({ message }: { message?: string }) {
 
                             {/* Left Side: Title */}
                             <div className="md:w-1/2 p-10 md:p-16 flex flex-col justify-center bg-white relative">
-                                <h2 className="text-5xl md:text-7xl font-bold text-slate-300 tracking-tighter mb-2">SIGN IN</h2>
-                                <div className="text-6xl md:text-8xl font-black text-slate-900 tracking-tighter leading-none">
-                                    BEYOND<br />
-                                    <span className="text-blue-600">LIVE</span>
+                                <h2 className="text-4xl md:text-5xl font-bold text-slate-300 tracking-tighter mb-4">SIGN IN</h2>
+                                <div className="text-5xl md:text-6xl font-black text-slate-900 tracking-tighter leading-none">
+                                    eVENTOS<br />
+                                    VIRTUALES<br />
+                                    <span className="text-blue-600">PRO</span>
                                 </div>
                             </div>
 
@@ -113,9 +122,9 @@ export default function AuthUi({ message }: { message?: string }) {
 
                         {/* Footer Links (Absolute Bottom) */}
                         <div className="absolute bottom-6 left-0 w-full flex justify-center md:justify-start md:pl-10 text-[10px] md:text-xs font-bold text-white/50 uppercase tracking-widest gap-4 md:gap-8 z-20">
-                            <span>Legal Notice</span>
-                            <span>Site Map</span>
-                            <span>Pro Events</span>
+                            <Link href="#" className="hover:text-white transition-colors">Legal Notice</Link>
+                            <Link href="#" className="hover:text-white transition-colors">Site Map</Link>
+                            <Link href="#" className="hover:text-white transition-colors">Pro Events</Link>
                         </div>
                     </motion.div>
                 )}
