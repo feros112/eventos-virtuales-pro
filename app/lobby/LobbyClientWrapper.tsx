@@ -6,6 +6,7 @@ import { Menu, User, LogOut, MessageSquare, Map, Compass, X, HelpCircle } from '
 import QuickNavigation from '../auditorio/QuickNavigation'
 import InstructionsOverlay from './InstructionsOverlay'
 import { clsx } from 'clsx'
+import { useLanguage } from '../context/LanguageContext'
 
 // Dynamically import Experience
 const Experience = dynamic(() => import('./LobbyScene'), {
@@ -47,7 +48,7 @@ function VideoModal({ onClose }: { onClose: () => void }) {
 export default function LobbyClientWrapper({ userEmail, profile, signOutAction, rooms }: any) {
     const [showQuickNav, setShowQuickNav] = useState(false)
     const [showInstructions, setShowInstructions] = useState(true)
-    const [showVideoModal, setShowVideoModal] = useState(false)
+    const { t } = useLanguage()
 
     return (
         <div className="flex flex-col h-screen bg-slate-50 overflow-hidden font-sans">
@@ -115,7 +116,7 @@ export default function LobbyClientWrapper({ userEmail, profile, signOutAction, 
                         <div className="flex justify-between items-center mb-4">
                             <div className="flex items-center gap-2 bg-rose-500/20 px-3 py-1 rounded-full border border-rose-500/30">
                                 <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
-                                <h3 className="text-rose-400 font-bold text-xs uppercase tracking-widest">Salas Disponibles</h3>
+                                <h3 className="text-rose-400 font-bold text-xs uppercase tracking-widest">{t.lobby.rooms.available || 'SALAS'}</h3>
                             </div>
                             <button
                                 onClick={() => setShowQuickNav(false)}
@@ -131,7 +132,7 @@ export default function LobbyClientWrapper({ userEmail, profile, signOutAction, 
                 {/* Floating Hint if QuickNav is closed */}
                 {!showQuickNav && (
                     <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/40 text-[10px] font-mono pointer-events-none tracking-widest uppercase">
-                        Clic y arrastra para explorar
+                        {t.lobby.instructions.drag || 'CLIC Y ARRASTRA PARA EXPLORAR'}
                     </div>
                 )}
             </main>
@@ -152,12 +153,12 @@ export default function LobbyClientWrapper({ userEmail, profile, signOutAction, 
                         )}
                     >
                         <Compass className={clsx("w-4 h-4 md:w-5 md:h-5", showQuickNav && "animate-spin-slow")} />
-                        <span>Navegación</span>
+                        <span>{t.lobby.instructions.desktop || 'NAVEGACIÓN'}</span>
                     </button>
 
                     <button className="hidden md:flex items-center gap-2 text-xs md:text-sm font-bold uppercase tracking-wider px-4 py-2 rounded-full text-slate-500 border border-transparent hover:bg-slate-50 transition-all">
                         <Map className="w-4 h-4" />
-                        Mapa
+                        {t.footer?.sitemap || 'MAPA'}
                     </button>
 
                     {/* Chat button for Mobile (visible only on small screens here if needed, or keeping it right) */}
