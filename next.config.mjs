@@ -10,4 +10,7 @@ const nextConfig = {
     },
 };
 
+
 export default nextConfig;
+
+// Forced rebuild timestamp: 2026-01-06T21:00:00
