@@ -116,7 +116,7 @@ function MainBuilding() {
                     position={[0, 6, 0]}
                     onPointerOver={() => { document.body.style.cursor = 'pointer'; setHover(true) }}
                     onPointerOut={() => { document.body.style.cursor = 'auto'; setHover(false) }}
-                    onClick={() => router.push('/auditorio')}
+                    onClick={() => router.push('/auditorio/main-theater')}
                 >
                     <planeGeometry args={[12, 12]} />
                     <meshStandardMaterial

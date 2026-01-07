@@ -1,9 +1,5 @@
-import InteriorExperience from './InteriorExperience'
+import { redirect } from 'next/navigation'
 
 export default function AuditorioIndex() {
-    return (
-        <main className="w-full h-screen">
-            <InteriorExperience />
-        </main>
-    )
+    redirect('/auditorio/main-theater')
 }
