@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from './context/LanguageContext'
-import LanguageSwitcher from './components/LanguageSwitcher'
+import FloatingLanguage from './components/FloatingLanguage'
 
 const inter = Inter({
   variable: "--font-inter",
@@ -23,7 +23,7 @@ export default function RootLayout({
     <html lang="es">
       <body className={`${inter.variable} font-sans antialiased bg-slate-950 text-white`}>
         <LanguageProvider>
-          <LanguageSwitcher />
+          <FloatingLanguage />
           {children}
         </LanguageProvider>
       </body>

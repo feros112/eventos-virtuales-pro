@@ -3,7 +3,7 @@
 import { useLanguage } from '../context/LanguageContext'
 import { Globe } from 'lucide-react'
 
-export default function LanguageSwitcher() {
+export default function FloatingLanguage() {
     const { language, toggleLanguage } = useLanguage()
 
     return (
