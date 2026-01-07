@@ -1,8 +1,8 @@
 'use client'
-// Force rebuild - Stability Update v2
+// Force rebuild - Stability Update v3 (Fixing Duplicate Exports)
 
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Text, Float, Stars, Grid, Environment, ContactShadows, Billboard } from '@react-three/drei'
+import { Text, Float, Stars, Grid, Environment, ContactShadows, Billboard, OrbitControls } from '@react-three/drei'
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing'
 import { useRouter } from 'next/navigation'
 import React, { useState, useMemo, useRef, Suspense } from 'react'
@@ -85,8 +85,6 @@ function Waypoint({ position, target, onClick }: { position: [number, number, nu
 }
 
 // --- 2. Main Building (Lobby Entrance) ---
-
-// 2. Main Building (Lobby Entrance)
 function MainBuilding() {
     const router = useRouter()
     const [hovered, setHover] = useState(false)
@@ -152,49 +150,7 @@ function MainBuilding() {
                 <boxGeometry args={[8.2, 30.2, 8.2]} />
                 <meshBasicMaterial color="#ec4899" wireframe />
             </mesh>
-
         </group>
-    )
-}
-
-// ... (StreamingStage remains roughly same or simplified if needed, but keeping it for now)
-
-// --- MAIN SCENE ---
-export default function Experience({ openVideo }: { openVideo?: () => void }) {
-    // ... (State logic)
-    const [targetPos, setTargetPos] = useState(new Vector3(0, CAMERA_HEIGHT, 15))
-
-    // ...
-
-    return (
-        <div className="w-full h-screen bg-slate-950">
-            <Canvas camera={{ position: [0, CAMERA_HEIGHT, 15], fov: 60 }} gl={{ toneMapping: THREE.ReinhardToneMapping, toneMappingExposure: 1.5 }}>
-
-                {/* Camera Controls - FREEDOM UNLOCKED */}
-                <OrbitControls
-                    target={[0, 5, 0]} // Middle of the plaza
-                    maxPolarAngle={Math.PI / 2 - 0.05} // Don't go below floor
-                    minDistance={5}
-                    maxDistance={40}
-                    enablePan={true}
-                />
-
-                {/* Lighting - Moody Night + Neon */}
-                <ambientLight intensity={0.5} />
-                {/* ... existing lights ... */}
-
-                {/* ... existing environment/grid ... */}
-
-                {/* ... */}
-                <Suspense fallback={null}>
-                    <MainBuilding />
-                    <StreamingStage onOpenVideo={openVideo || (() => { })} />
-                </Suspense>
-
-                {/* ... crowd/waypoints ... */}
-
-            </Canvas>
-        </div>
     )
 }
 
@@ -305,7 +261,8 @@ function CameraController({ targetPosition }: { targetPosition: Vector3 }) {
 }
 
 // --- MAIN SCENE ---
-export default function Experience({ openVideo }: { openVideo?: () => void }) {
+export default function LobbyScene({ openVideo }: { openVideo?: () => void }) {
+    // ... (State logic)
     const [targetPos, setTargetPos] = useState(new Vector3(0, CAMERA_HEIGHT, 15))
 
     const handleWaypointClick = (newPos: Vector3) => {
