@@ -8,7 +8,7 @@ import InstructionsOverlay from './InstructionsOverlay'
 import { clsx } from 'clsx'
 
 // Dynamically import Experience
-const Experience = dynamic(() => import('./Experience'), {
+const Experience = dynamic(() => import('./LobbyScene'), {
     ssr: false,
     loading: () => (
         <div className="w-full h-full bg-black flex items-center justify-center">
