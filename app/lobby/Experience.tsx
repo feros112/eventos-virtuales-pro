@@ -93,120 +93,108 @@ function MainBuilding() {
 
     return (
         <group position={[0, 0, -25]}>
-            {/* ... (Previous code remains, just wrapping the Image) ... */}
-            {/* --- LEFT DECORATIVE WALL (Voronoi Pattern style) --- */}
-            <mesh position={[-20, 5, 5]} rotation={[0, Math.PI / 4, 0]}>
-                <boxGeometry args={[10, 15, 1]} />
-                <meshStandardMaterial color="#e2e8f0" roughness={0.5} metalness={0.2} />
+            {/* --- MASSIVE STRUCTURE (Cyberpunk Monolith) --- */}
+            {/* Main Block */}
+            <mesh position={[0, 10, 0]}>
+                <boxGeometry args={[40, 20, 10]} />
+                <meshStandardMaterial
+                    color="#0f172a"
+                    roughness={0.2}
+                    metalness={0.8}
+                />
             </mesh>
-            {/* Pattern Overlay (Simulated) */}
-            <mesh position={[-19.9, 5, 5.1]} rotation={[0, Math.PI / 4, 0]}>
-                <planeGeometry args={[9, 14]} />
-                <meshBasicMaterial color="#cbd5e1" wireframe />
+
+            {/* Neon Edges (Wireframe effect) */}
+            <mesh position={[0, 10, 0]}>
+                <boxGeometry args={[40.2, 20.2, 10.2]} />
+                <meshBasicMaterial color="#3b82f6" wireframe />
             </mesh>
 
-            {/* --- MAIN GLASS FACADE --- */}
-            <group position={[0, 0, 0]}>
-                {/* Glass Panes */}
-                <mesh position={[0, 7.5, 0]}>
-                    <boxGeometry args={[30, 15, 0.5]} />
-                    <meshPhysicalMaterial
-                        color="#eff6ff"
-                        transmission={0.9}
-                        opacity={0.3}
-                        transparent
-                        roughness={0}
-                        metalness={0.1}
-                        ior={1.5}
-                        thickness={2}
-                    />
-                </mesh>
-
-                {/* Mullions / Window Frames (Grid) */}
-                {/* Verticals */}
-                {[-14, -7, 0, 7, 14].map((x, i) => (
-                    <mesh key={`v-${i}`} position={[x, 7.5, 0.3]}>
-                        <boxGeometry args={[0.5, 15, 0.2]} />
-                        <meshStandardMaterial color="#334155" metalness={0.8} roughness={0.2} />
-                    </mesh>
-                ))}
-                {/* Horizontals */}
-                {[3, 7, 11].map((y, i) => (
-                    <mesh key={`h-${i}`} position={[0, y, 0.3]}>
-                        <boxGeometry args={[30, 0.2, 0.2]} />
-                        <meshStandardMaterial color="#334155" metalness={0.8} roughness={0.2} />
-                    </mesh>
-                ))}
-
-                {/* Interior Pillars (Visible through glass) */}
-                {[-10, 0, 10].map((x, i) => (
-                    <mesh key={`p-${i}`} position={[x, 7.5, -5]}>
-                        <cylinderGeometry args={[1, 1, 15, 32]} />
-                        <meshStandardMaterial color="#94a3b8" />
-                    </mesh>
-                ))}
-            </group>
-
-            {/* Interior Light Leak */}
-            <pointLight position={[0, 5, -5]} intensity={8} color="#22d3ee" distance={25} />
-
-            {/* --- ENTRANCE (Center-Right) --- */}
-            <group position={[5, 2.5, 0.5]}>
-                {/* Concrete Header visible above Door */}
-                <mesh position={[0, 3, 0]}>
-                    <boxGeometry args={[12, 1, 1]} />
-                    <meshStandardMaterial color="#fff" />
-                </mesh>
-
-                {/* Door Frame */}
-                <mesh position={[0, -0.5, 0]}>
-                    <boxGeometry args={[10, 5, 0.5]} />
-                    <meshStandardMaterial color="#1e293b" />
-                </mesh>
-
-                {/* Interactive Door Area */}
+            {/* Glowing Entrance Portal */}
+            <group position={[0, 0, 5.1]}>
                 <mesh
-                    position={[0, -0.5, 0.3]}
+                    position={[0, 6, 0]}
                     onPointerOver={() => { document.body.style.cursor = 'pointer'; setHover(true) }}
                     onPointerOut={() => { document.body.style.cursor = 'auto'; setHover(false) }}
                     onClick={() => router.push('/auditorio')}
                 >
-                    <planeGeometry args={[8, 4]} />
+                    <planeGeometry args={[12, 12]} />
                     <meshStandardMaterial
-                        color={hovered ? "#0ea5e9" : "#000"}
-                        emissive={hovered ? "#0ea5e9" : "#000"}
-                        emissiveIntensity={hovered ? 2 : 0}
-                        transparent
-                        opacity={hovered ? 0.8 : 0.6}
+                        color={hovered ? "#3b82f6" : "#1e40af"}
+                        emissive={hovered ? "#60a5fa" : "#1e3a8a"}
+                        emissiveIntensity={2}
+                        toneMapped={false}
                     />
                 </mesh>
-
-                <Text position={[0, 1.5, 0.4]} fontSize={0.6} color={hovered ? "#0ea5e9" : "white"} anchorX="center" anchorY="bottom">
+                <Text position={[0, 14, 0]} fontSize={2} color="#60a5fa" anchorX="center" anchorY="bottom" font="/fonts/Inter-Bold.ttf">
                     MAIN THEATER
                 </Text>
-            </group>
-
-            {/* --- BIG SCREEN (Offset Right) --- */}
-            <group position={[8, 9, 0.8]}>
-                <mesh>
-                    <boxGeometry args={[14.2, 7.2, 0.5]} />
-                    <meshStandardMaterial color="#000" />
-                </mesh>
-                {/* Fallback Screen - Glowing Panel */}
-                <mesh position={[0, 0, 0.3]}>
-                    <planeGeometry args={[14, 7]} />
-                    <meshStandardMaterial color="#1e1b4b" emissive="#4f46e5" emissiveIntensity={0.5} toneMapped={false} />
-                </mesh>
-                <Text position={[0, 0, 0.4]} fontSize={0.8} color="white" anchorX="center" anchorY="middle" font="/fonts/Inter-Bold.ttf">
-                    FEATURED EVENT
+                <Text position={[0, 12.5, 0]} fontSize={0.8} color="white" anchorX="center" anchorY="bottom">
+                    CLICK TO ENTER
                 </Text>
             </group>
 
-            {/* Interior Signage (Visible through glass left) */}
-            <Text position={[-8, 6, -2]} fontSize={2} color="#2563eb" anchorX="center" anchorY="middle" font="/fonts/Inter-Bold.ttf">
-                BEYOND
-            </Text>
+            {/* Side Towers */}
+            <mesh position={[-25, 15, 5]}>
+                <boxGeometry args={[8, 30, 8]} />
+                <meshStandardMaterial color="#020617" />
+            </mesh>
+            <mesh position={[-25, 15, 5]}>
+                <boxGeometry args={[8.2, 30.2, 8.2]} />
+                <meshBasicMaterial color="#ec4899" wireframe />
+            </mesh>
+
+            <mesh position={[25, 15, 5]}>
+                <boxGeometry args={[8, 30, 8]} />
+                <meshStandardMaterial color="#020617" />
+            </mesh>
+            <mesh position={[25, 15, 5]}>
+                <boxGeometry args={[8.2, 30.2, 8.2]} />
+                <meshBasicMaterial color="#ec4899" wireframe />
+            </mesh>
+
         </group>
+    )
+}
+
+// ... (StreamingStage remains roughly same or simplified if needed, but keeping it for now)
+
+// --- MAIN SCENE ---
+export default function Experience({ openVideo }: { openVideo?: () => void }) {
+    // ... (State logic)
+    const [targetPos, setTargetPos] = useState(new Vector3(0, CAMERA_HEIGHT, 15))
+
+    // ...
+
+    return (
+        <div className="w-full h-screen bg-slate-950">
+            <Canvas camera={{ position: [0, CAMERA_HEIGHT, 15], fov: 60 }} gl={{ toneMapping: THREE.ReinhardToneMapping, toneMappingExposure: 1.5 }}>
+
+                {/* Camera Controls - FREEDOM UNLOCKED */}
+                <OrbitControls
+                    target={[0, 5, 0]} // Middle of the plaza
+                    maxPolarAngle={Math.PI / 2 - 0.05} // Don't go below floor
+                    minDistance={5}
+                    maxDistance={40}
+                    enablePan={true}
+                />
+
+                {/* Lighting - Moody Night + Neon */}
+                <ambientLight intensity={0.5} />
+                {/* ... existing lights ... */}
+
+                {/* ... existing environment/grid ... */}
+
+                {/* ... */}
+                <Suspense fallback={null}>
+                    <MainBuilding />
+                    <StreamingStage onOpenVideo={openVideo || (() => { })} />
+                </Suspense>
+
+                {/* ... crowd/waypoints ... */}
+
+            </Canvas>
+        </div>
     )
 }
 
@@ -368,6 +356,15 @@ export default function Experience({ openVideo }: { openVideo?: () => void }) {
                     fadeDistance={40}
                     fadeStrength={1}
                     infiniteGrid
+                />
+
+                {/* Controls - FREEDOM UNLOCKED */}
+                <OrbitControls
+                    target={[0, 5, 0]} // Middle of the plaza
+                    maxPolarAngle={Math.PI / 2 - 0.05} // Don't go below floor
+                    minDistance={5}
+                    maxDistance={40}
+                    enablePan={true}
                 />
 
                 {/* --- STRUCTURES (Wrapped in Suspense to prevent texture crash) --- */}
