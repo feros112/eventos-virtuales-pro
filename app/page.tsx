@@ -1,3 +1,5 @@
+'use client'
+
 import { ArrowRight, Globe, Lock, Coins, LayoutTemplate, MonitorPlay, Zap, Users } from "lucide-react";
 import Link from "next/link";
 import { useLanguage } from './context/LanguageContext'
