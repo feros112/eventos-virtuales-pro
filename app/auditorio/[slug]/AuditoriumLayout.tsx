@@ -6,7 +6,7 @@ import Link from 'next/link'
 import ChatBox from '../ChatBox'
 import MainStageExperience from './MainStageExperience'
 import { createClient } from '@/utils/supabase/client'
-// import { toast } from 'sonner'
+import { useLanguage } from '../../context/LanguageContext'
 
 interface AuditoriumLayoutProps {
     streamUrl: string
@@ -19,7 +19,7 @@ interface AuditoriumLayoutProps {
 export default function AuditoriumLayout({ streamUrl, isLive, userEmail, userId, streamTitle }: AuditoriumLayoutProps) {
     const [isChatOpen, setIsChatOpen] = useState(true)
     const [handRaised, setHandRaised] = useState(false)
-    const supabase = createClient()
+    const { t } = useLanguage()
 
     // 1. Check Initial State & Realtime Subscription
     useEffect(() => {
@@ -29,77 +29,41 @@ export default function AuditoriumLayout({ streamUrl, isLive, userEmail, userId,
                 .select('*')
                 .eq('user_id', userId)
                 .eq('type', 'raise_hand')
-                .eq('status', 'pending') // Only pending counts as "active"
+                .eq('status', 'pending')
                 .single()
 
             if (data) setHandRaised(true)
         }
         checkHand()
 
-        // Listen for changes (e.g. Admin approved/dismissed)
         const channel = supabase
             .channel('interaction_events_user')
-            .on(
-                'postgres_changes',
-                {
-                    event: '*',
-                    schema: 'public',
-                    table: 'interaction_events',
-                    filter: `user_id=eq.${userId}`
-                },
-                (payload) => {
-                    if (payload.new && 'status' in payload.new) {
-                        const status = (payload.new as any).status
-                        if (status !== 'pending') {
-                            setHandRaised(false)
-                            // Optional: Toast notification here "Your hand was dismissed"
-                        }
-                    } else if (payload.eventType === 'DELETE') {
-                        setHandRaised(false)
-                    }
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'interaction_events', filter: `user_id=eq.${userId}` }, (payload) => {
+                if (payload.new && 'status' in payload.new) {
+                    if ((payload.new as any).status !== 'pending') setHandRaised(false)
+                } else if (payload.eventType === 'DELETE') {
+                    setHandRaised(false)
                 }
-            )
+            })
             .subscribe()
 
-        return () => {
-            supabase.removeChannel(channel)
-        }
+        return () => { supabase.removeChannel(channel) }
     }, [userId, supabase])
 
 
     // 2. Toggle Hand
     const toggleHand = async () => {
         if (handRaised) {
-            // Cancel request (Delete or update to dismissed)
-            // Strategy: Update to 'cancelled' so we keep history, or Delete. 
-            // Let's Delete for simplicity of "toggle", or update status.
-            // Let's DELETE pending reqs.
-
-            setHandRaised(false) // Optimistic update
-
-            await supabase
-                .from('interaction_events')
-                .delete()
-                .eq('user_id', userId)
-                .eq('type', 'raise_hand')
-                .eq('status', 'pending')
+            setHandRaised(false)
+            await supabase.from('interaction_events').delete().match({ user_id: userId, type: 'raise_hand', status: 'pending' })
         } else {
-            // Raise hand
-            setHandRaised(true) // Optimistic update
-
-            const { error } = await supabase
-                .from('interaction_events')
-                .insert({
-                    user_id: userId,
-                    type: 'raise_hand',
-                    status: 'pending',
-                    payload: { email: userEmail, timestamp: new Date().toISOString() }
-                })
-
-            if (error) {
-                setHandRaised(false)
-                console.error("Failed to raise hand", error)
-            }
+            setHandRaised(true)
+            await supabase.from('interaction_events').insert({
+                user_id: userId,
+                type: 'raise_hand',
+                status: 'pending',
+                payload: { email: userEmail, timestamp: new Date().toISOString() }
+            })
         }
     }
 
@@ -123,14 +87,14 @@ export default function AuditoriumLayout({ streamUrl, isLive, userEmail, userId,
                         className={`hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${handRaised ? 'bg-amber-500 text-black animate-pulse' : 'bg-white/10 hover:bg-white/20 text-slate-300'}`}
                     >
                         <Hand className="w-3 h-3" />
-                        {handRaised ? 'TU MANO LEVANTADA' : 'PEDIR LA PALABRA'}
+                        {handRaised ? t.auditorium.handRaised : t.auditorium.raiseHand}
                     </button>
 
                     {/* Toggle Chat Button */}
                     <button
                         onClick={() => setIsChatOpen(!isChatOpen)}
                         className={`p-2 rounded-lg transition-colors ${isChatOpen ? 'bg-indigo-600 text-white' : 'bg-white/5 text-slate-400 hover:bg-white/10'}`}
-                        title={isChatOpen ? "Ocultar Chat" : "Mostrar Chat"}
+                        title={isChatOpen ? t.auditorium.toggleChat : t.auditorium.toggleChat}
                     >
                         {isChatOpen ? <MessageSquareOff className="w-4 h-4" /> : <MessageSquare className="w-4 h-4" />}
                     </button>
@@ -146,7 +110,7 @@ export default function AuditoriumLayout({ streamUrl, isLive, userEmail, userId,
                     {!isChatOpen && (
                         <div className="absolute top-4 right-4 z-40 md:hidden">
                             <div className="bg-black/50 backdrop-blur text-xs px-2 py-1 rounded border border-white/10">
-                                Stage Only Mode
+                                {t.auditorium.stageOnly}
                             </div>
                         </div>
                     )}

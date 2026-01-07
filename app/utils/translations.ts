@@ -58,6 +58,14 @@ export const translations = {
             title: "SALA DE EXPOSICIÓN",
             visit: "VISITAR",
             backToLobby: "VOLVER AL LOBBY"
+        },
+        auditorium: {
+            live: "EN VIVO",
+            offline: "OFFLINE",
+            raiseHand: "PEDIR LA PALABRA",
+            handRaised: "TU MANO LEVANTADA",
+            stageOnly: "Solo Escenario",
+            toggleChat: "Chat"
         }
     },
     en: {
@@ -103,6 +111,7 @@ export const translations = {
                 gotIt: "GOT IT!"
             },
             rooms: {
+                available: "AVAILABLE ROOMS",
                 auditorium: "AUDITORIUM",
                 expo: "EXPO HALL",
                 workshops: "WORKSHOPS",
@@ -113,6 +122,14 @@ export const translations = {
             title: "EXPO HALL",
             visit: "VISIT",
             backToLobby: "BACK TO LOBBY"
+        },
+        auditorium: {
+            live: "LIVE",
+            offline: "OFFLINE",
+            raiseHand: "RAISE HAND",
+            handRaised: "HAND RAISED",
+            stageOnly: "Stage Only",
+            toggleChat: "Toggle Chat"
         }
     }
 }
