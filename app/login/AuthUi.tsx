@@ -47,11 +47,8 @@ export default function AuthUi({ message }: { message?: string }) {
                         {/* Background Elements */}
                         <div className="absolute inset-0 z-0">
                             {/* Blue Gradient Background - Simulating the 'confetti' image with CSS or simple image */}
-                            <img
-                                src="https://images.unsplash.com/photo-1514525253440-b393452e8d26?q=80&w=2574&auto=format&fit=crop"
-                                alt="Blue Party"
-                                className="w-full h-full object-cover opacity-30 mix-blend-luminosity"
-                            />
+                            {/* Blue Gradient Background - Simulating party atmosphere */}
+                            <div className="w-full h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-600 via-blue-900 to-slate-900 opacity-50 block" />
                             <div className="absolute inset-0 bg-blue-900/80 mix-blend-multiply" />
                             <div className="absolute top-0 right-0 p-10 lg:p-20 text-blue-200/20 font-black text-6xl md:text-8xl lg:text-9xl tracking-tighter select-none z-0">
                                 <ClientDate />
@@ -156,11 +153,8 @@ export default function AuthUi({ message }: { message?: string }) {
                         <div className="lg:w-[65%] relative bg-indigo-900 overflow-hidden flex flex-col justify-between p-8 md:p-12 lg:p-20 text-white min-h-[400px] lg:min-h-screen">
                             {/* Background Image */}
                             <div className="absolute inset-0 z-0">
-                                <img
-                                    src="https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?q=80&w=1974&auto=format&fit=crop"
-                                    alt="Concert Crowd"
-                                    className="w-full h-full object-cover opacity-60 mix-blend-overlay"
-                                />
+                                {/* Abstract Background */}
+                                <div className="w-full h-full bg-[conic-gradient(at_top_right,_var(--tw-gradient-stops))] from-indigo-900 via-purple-900 to-cyan-900 opacity-60 mix-blend-overlay" />
                                 <div className="absolute inset-0 bg-gradient-to-tr from-indigo-900/90 via-purple-900/40 to-cyan-500/30" />
                             </div>
 

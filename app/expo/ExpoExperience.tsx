@@ -1,7 +1,7 @@
 'use client'
 
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Text, Grid, Image, Environment, useTexture, OrbitControls, useCursor } from '@react-three/drei'
+import { Text, Grid, Environment, useTexture, OrbitControls, useCursor } from '@react-three/drei'
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing'
 import { useRouter } from 'next/navigation'
 import { useState, useRef, Suspense } from 'react'
@@ -11,13 +11,13 @@ import { Vector3 } from 'three'
 // --- ASSETS & DATA ---
 // Placeholder sponsor data - normally passed via props or context
 const SPONSORS = [
-    { id: 1, name: "TechGiant", tier: "gold", image: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=1000", pos: [0, 0, -10] },
-    { id: 2, name: "CloudSoft", tier: "gold", image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=1000", pos: [-15, 0, -10] },
-    { id: 3, name: "InnovateX", tier: "gold", image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&q=80&w=1000", pos: [15, 0, -10] },
-    { id: 4, name: "StartupOne", tier: "silver", image: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&q=80&w=1000", pos: [-8, 0, 5] },
-    { id: 5, name: "DevCorp", tier: "silver", image: "https://images.unsplash.com/photo-1504384308090-c54be3855833?auto=format&fit=crop&q=80&w=1000", pos: [8, 0, 5] },
-    { id: 6, name: "PixelStudio", tier: "bronze", image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&q=80&w=1000", pos: [-15, 0, 15] },
-    { id: 7, name: "GlobalNet", tier: "bronze", image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&q=80&w=1000", pos: [15, 0, 15] },
+    { id: 1, name: "TechGiant", tier: "gold", color: "#3b82f6", pos: [0, 0, -10] },
+    { id: 2, name: "CloudSoft", tier: "gold", color: "#6366f1", pos: [-15, 0, -10] },
+    { id: 3, name: "InnovateX", tier: "gold", color: "#8b5cf6", pos: [15, 0, -10] },
+    { id: 4, name: "StartupOne", tier: "silver", color: "#cbd5e1", pos: [-8, 0, 5] },
+    { id: 5, name: "DevCorp", tier: "silver", color: "#94a3b8", pos: [8, 0, 5] },
+    { id: 6, name: "PixelStudio", tier: "bronze", color: "#fca5a5", pos: [-15, 0, 15] },
+    { id: 7, name: "GlobalNet", tier: "bronze", color: "#fdba74", pos: [15, 0, 15] },
 ]
 
 // --- COMPONENTS ---
@@ -61,13 +61,10 @@ function Stand({ data, onClick }: { data: any, onClick: (sponsor: any) => void }
                     <boxGeometry args={[5, 4, 0.2]} />
                     <meshStandardMaterial color="#334155" />
                 </mesh>
-                {/* Image Screen */}
-                <Image
-                    url={data.image}
-                    position={[0, 0, 0.15]}
-                    scale={[4.6, 3.6]}
-                    toneMapped={false}
-                />
+                <mesh position={[0, 0, 0.15]}>
+                    <planeGeometry args={[4.6, 3.6]} />
+                    <meshStandardMaterial color={data.color} emissive={data.color} emissiveIntensity={0.5} toneMapped={false} />
+                </mesh>
             </group>
 
             {/* --- DESK --- */}
@@ -160,7 +157,7 @@ export default function ExpoExperience() {
                         </button>
 
                         <div className="flex flex-col md:flex-row gap-6">
-                            <img src={selectedSponsor.image} alt={selectedSponsor.name} className="w-full md:w-1/2 h-48 object-cover rounded-lg" />
+                            <div className="w-full md:w-1/2 h-48 rounded-lg shadow-inner" style={{ backgroundColor: selectedSponsor.color }} />
                             <div>
                                 <h2 className="text-3xl font-bold text-white mb-2">{selectedSponsor.name}</h2>
                                 <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold uppercase mb-4 ${selectedSponsor.tier === 'gold' ? 'bg-amber-500/20 text-amber-400' : 'bg-slate-700 text-slate-300'}`}>

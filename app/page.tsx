@@ -1,7 +1,5 @@
-
 import { ArrowRight, Globe, Lock, Coins, LayoutTemplate, MonitorPlay, Zap, Users } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
 import { useLanguage } from './context/LanguageContext'
 
 export default function Home() {
