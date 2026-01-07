@@ -42,9 +42,8 @@ export default async function AuditorioPage({ params }: { params: Promise<{ slug
             streamUrl={config.stream_url}
             isLive={config.is_live}
             userEmail={user.email!}
+            userId={user.id}
             streamTitle={config.stream_title}
         />
     )
 }
-
-

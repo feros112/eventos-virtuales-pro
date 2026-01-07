@@ -1,26 +1,106 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { ArrowLeft, MessageSquare, Send, Users, Hand, MessageSquareOff, ChevronRight, ChevronLeft } from 'lucide-react'
 import Link from 'next/link'
 import ChatBox from '../ChatBox'
 import MainStageExperience from './MainStageExperience'
+import { createClient } from '@/utils/supabase/client'
+import { toast } from 'sonner' // Assuming sonner is installed, or we can use basic alerts for now
 
 interface AuditoriumLayoutProps {
     streamUrl: string
     isLive: boolean
     userEmail: string
+    userId: string
     streamTitle: string
 }
 
-export default function AuditoriumLayout({ streamUrl, isLive, userEmail, streamTitle }: AuditoriumLayoutProps) {
+export default function AuditoriumLayout({ streamUrl, isLive, userEmail, userId, streamTitle }: AuditoriumLayoutProps) {
     const [isChatOpen, setIsChatOpen] = useState(true)
     const [handRaised, setHandRaised] = useState(false)
+    const supabase = createClient()
 
-    // Toggle Hand (Mock function for now, connect to DB later)
-    const toggleHand = () => {
-        setHandRaised(!handRaised)
-        // TODO: Send signal to Supabase 'interaction_events'
+    // 1. Check Initial State & Realtime Subscription
+    useEffect(() => {
+        const checkHand = async () => {
+            const { data } = await supabase
+                .from('interaction_events')
+                .select('*')
+                .eq('user_id', userId)
+                .eq('type', 'raise_hand')
+                .eq('status', 'pending') // Only pending counts as "active"
+                .single()
+
+            if (data) setHandRaised(true)
+        }
+        checkHand()
+
+        // Listen for changes (e.g. Admin approved/dismissed)
+        const channel = supabase
+            .channel('interaction_events_user')
+            .on(
+                'postgres_changes',
+                {
+                    event: '*',
+                    schema: 'public',
+                    table: 'interaction_events',
+                    filter: `user_id=eq.${userId}`
+                },
+                (payload) => {
+                    if (payload.new && 'status' in payload.new) {
+                        const status = (payload.new as any).status
+                        if (status !== 'pending') {
+                            setHandRaised(false)
+                            // Optional: Toast notification here "Your hand was dismissed"
+                        }
+                    } else if (payload.eventType === 'DELETE') {
+                        setHandRaised(false)
+                    }
+                }
+            )
+            .subscribe()
+
+        return () => {
+            supabase.removeChannel(channel)
+        }
+    }, [userId, supabase])
+
+
+    // 2. Toggle Hand
+    const toggleHand = async () => {
+        if (handRaised) {
+            // Cancel request (Delete or update to dismissed)
+            // Strategy: Update to 'cancelled' so we keep history, or Delete. 
+            // Let's Delete for simplicity of "toggle", or update status.
+            // Let's DELETE pending reqs.
+
+            setHandRaised(false) // Optimistic update
+
+            await supabase
+                .from('interaction_events')
+                .delete()
+                .eq('user_id', userId)
+                .eq('type', 'raise_hand')
+                .eq('status', 'pending')
+        } else {
+            // Raise hand
+            setHandRaised(true) // Optimistic update
+
+            const { error } = await supabase
+                .from('interaction_events')
+                .insert({
+                    user_id: userId,
+                    type: 'raise_hand',
+                    status: 'pending',
+                    payload: { email: userEmail, timestamp: new Date().toISOString() }
+                })
+
+            if (error) {
+                setHandRaised(false)
+                console.error("Failed to raise hand", error)
+            }
+        }
     }
 
     return (
@@ -75,8 +155,8 @@ export default function AuditoriumLayout({ streamUrl, isLive, userEmail, streamT
                 {/* Sidebar (Chat) - Collapsible */}
                 <div
                     className={`
-                        fixed md:relative top-[60px] md:top-0 right-0 bottom-0 
-                        w-[85vw] md:w-[350px] 
+                        fixed md:relative top-[60px] md:top-0 right-0 bottom-0
+                        w-[85vw] md:w-[350px]
                         bg-slate-900 border-l border-white/10 z-30
                         transform transition-transform duration-300 ease-in-out
                         ${isChatOpen ? 'translate-x-0' : 'translate-x-full md:hidden'}
