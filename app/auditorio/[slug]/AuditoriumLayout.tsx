@@ -6,7 +6,7 @@ import Link from 'next/link'
 import ChatBox from '../ChatBox'
 import MainStageExperience from './MainStageExperience'
 import { createClient } from '@/utils/supabase/client'
-import { toast } from 'sonner' // Assuming sonner is installed, or we can use basic alerts for now
+// import { toast } from 'sonner'
 
 interface AuditoriumLayoutProps {
     streamUrl: string
