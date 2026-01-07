@@ -159,6 +159,62 @@ function StageArchitecture() {
     )
 }
 
+// 4. Entrance/Exit Door
+function EntranceDoor() {
+    const router = useRouter()
+    const [hovered, setHover] = useState(false)
+
+    return (
+        <group position={[0, 2.5, 19.5]} rotation={[0, Math.PI, 0]}>
+            {/* Door Frame */}
+            <mesh position={[0, 0, 0]}>
+                <boxGeometry args={[6, 5, 0.5]} />
+                <meshStandardMaterial color="#0f172a" />
+            </mesh>
+
+            {/* Door Panels (Double Doors) */}
+            <mesh
+                position={[-1.4, -0.1, 0.1]}
+                onClick={() => router.push('/lobby')}
+                onPointerOver={() => { document.body.style.cursor = 'pointer'; setHover(true) }}
+                onPointerOut={() => { document.body.style.cursor = 'auto'; setHover(false) }}
+            >
+                <boxGeometry args={[2.5, 4.5, 0.2]} />
+                <meshStandardMaterial
+                    color={hovered ? "#334155" : "#1e293b"}
+                    emissive={hovered ? "#334155" : "#000"}
+                />
+            </mesh>
+            <mesh
+                position={[1.4, -0.1, 0.1]}
+                onClick={() => router.push('/lobby')}
+                onPointerOver={() => { document.body.style.cursor = 'pointer'; setHover(true) }}
+                onPointerOut={() => { document.body.style.cursor = 'auto'; setHover(false) }}
+            >
+                <boxGeometry args={[2.5, 4.5, 0.2]} />
+                <meshStandardMaterial
+                    color={hovered ? "#334155" : "#1e293b"}
+                    emissive={hovered ? "#334155" : "#000"}
+                />
+            </mesh>
+
+            {/* EXIT Sign */}
+            <group position={[0, 3, 0.1]}>
+                <mesh>
+                    <boxGeometry args={[2, 0.8, 0.1]} />
+                    <meshStandardMaterial color="#000" />
+                </mesh>
+                <Text position={[0, 0, 0.1]} fontSize={0.4} color="#22c55e" anchorX="center" anchorY="middle" font="/fonts/Inter-Bold.ttf">
+                    EXIT
+                </Text>
+            </group>
+
+            {/* Glow from the lobby (simulated) */}
+            <pointLight position={[0, 2, -2]} intensity={2} color="#22d3ee" distance={10} />
+        </group>
+    )
+}
+
 export default function MainStageExperience({ streamUrl, isLive }: { streamUrl: string, isLive: boolean }) {
 
     return (
@@ -221,6 +277,7 @@ export default function MainStageExperience({ streamUrl, isLive }: { streamUrl: 
                 <StageArchitecture />
                 <MainScreen streamUrl={streamUrl} isLive={isLive} />
                 <InstancedSeats />
+                <EntranceDoor />
 
                 {/* Ground Reflections Helper - Invisible plane associated with reflector if needed, but handled in component */}
 
