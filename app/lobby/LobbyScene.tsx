@@ -124,7 +124,7 @@ function MainBuilding() {
                         toneMapped={false}
                     />
                 </mesh>
-                <Text position={[0, 14, 0]} fontSize={2} color="#60a5fa" anchorX="center" anchorY="bottom" font="/fonts/Inter-Bold.ttf">
+                <Text position={[0, 14, 0]} fontSize={2} color="#60a5fa" anchorX="center" anchorY="bottom">
                     MAIN THEATER
                 </Text>
                 <Text position={[0, 12.5, 0]} fontSize={0.8} color="white" anchorX="center" anchorY="bottom">
@@ -219,7 +219,7 @@ function StreamingStage({ onOpenVideo }: { onOpenVideo: () => void }) {
                     </Float>
                 )}
 
-                <Text position={[0, 9.5, -4.6]} fontSize={0.8} color="#f472b6" anchorX="center" anchorY="bottom" font="/fonts/Inter-Bold.ttf">
+                <Text position={[0, 9.5, -4.6]} fontSize={0.8} color="#f472b6" anchorX="center" anchorY="bottom">
                     CLICK TO WATCH
                 </Text>
             </group>
