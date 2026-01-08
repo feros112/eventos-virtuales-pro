@@ -1,7 +1,7 @@
 'use client'
 
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Text, Float, Stars, Grid, Environment, ContactShadows, Billboard, OrbitControls, useTexture } from '@react-three/drei'
+import { Text, Float, Stars, Grid, Environment, ContactShadows, Billboard, useTexture, CameraControls } from '@react-three/drei'
 import { EffectComposer, Bloom, Vignette, ToneMapping } from '@react-three/postprocessing'
 import { useRouter } from 'next/navigation'
 import React, { useState, useMemo, useRef, Suspense } from 'react'
@@ -211,7 +211,7 @@ export default function LobbyScene({ openVideo }: { openVideo?: () => void }) {
                 {/* Environment - Clean Sky */}
                 <Environment preset="city" />
                 <color attach="background" args={['#f8fafc']} /> {/* Sky Color */}
-                <Stars radius={100} depth={50} count={1000} factor={4} saturation={0} fade speed={0.5} opacity={0.2} />
+                <Stars radius={100} depth={50} count={1000} factor={4} saturation={0} fade speed={0.5} />
 
                 {/* Ground - Tiled Pavers */}
                 <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, 0]} receiveShadow>

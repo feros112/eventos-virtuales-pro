@@ -73,73 +73,74 @@ export default function AuditoriumLayout({ streamUrl, isLive, userEmail, userId,
 
 
     return (
-        <div className="flex flex-col h-screen bg-slate-950 text-white overflow-hidden">
-            {/* Reaction Overlay (Global) */}
-            <ReactionOverlay roomId="main-auditorium" />
+        <div className="relative h-screen bg-slate-900 text-slate-900 overflow-hidden font-sans">
+            {/* --- 3D STAGE (Background) --- */}
+            <div className={`absolute inset-0 z-0 transition-all duration-500 ease-in-out ${isChatOpen ? 'mr-[350px]' : 'mr-0'}`}>
+                <MainStageExperience streamUrl={streamUrl} isLive={isLive} />
+            </div>
 
-            {/* Polls Widget (Global) */}
-            <PollsWidget userId={userId} roomId="main-auditorium" isAdmin={userEmail.includes('@')} />
-
-            {/* Navbar (Client Header) */}
-            <nav className="h-[60px] border-b border-white/10 bg-black/40 backdrop-blur-md px-4 flex justify-between items-center z-50 flex-shrink-0">
-                <div className="flex items-center gap-4">
-                    <Link href="/lobby" className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors text-sm font-medium">
+            {/* --- TOP NAVBAR (Glassmorphism) --- */}
+            <nav className="absolute top-0 left-0 right-0 h-16 z-20 flex justify-between items-center px-6 bg-gradient-to-b from-black/60 to-transparent pointer-events-none">
+                <div className="pointer-events-auto flex items-center gap-4">
+                    <Link
+                        href="/lobby"
+                        className="flex items-center gap-2 text-white/80 hover:text-white transition-colors bg-white/10 hover:bg-white/20 backdrop-blur-md px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider border border-white/10"
+                    >
                         <ArrowLeft className="w-4 h-4" />
-                        <span className="hidden sm:inline">Lobby</span>
+                        <span>Lobby</span>
                     </Link>
-                    <div className="h-4 w-px bg-white/10 hidden sm:block" />
-                    <span className="font-bold text-indigo-400 text-sm md:text-base truncate max-w-[200px]">{streamTitle}</span>
+                    <div className="flex flex-col">
+                        <span className="text-white font-bold text-lg leading-none shadow-black drop-shadow-md">{streamTitle}</span>
+                        <span className="text-red-500 text-[10px] font-black tracking-widest uppercase flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse" />
+                            En Vivo
+                        </span>
+                    </div>
                 </div>
 
-                <div className="flex items-center gap-2">
-                    {/* Raise Hand Button */}
+                <div className="pointer-events-auto flex items-center gap-3">
+                    {/* Hand Raise */}
                     <button
                         onClick={toggleHand}
-                        className={`hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${handRaised ? 'bg-amber-500 text-black animate-pulse' : 'bg-white/10 hover:bg-white/20 text-slate-300'}`}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold transition-all backdrop-blur-md border ${handRaised ? 'bg-amber-500 text-black border-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.5)]' : 'bg-white/10 text-white border-white/10 hover:bg-white/20'}`}
                     >
-                        <Hand className="w-3 h-3" />
-                        {handRaised ? t.auditorium.handRaised : t.auditorium.raiseHand}
+                        <Hand className="w-4 h-4" />
+                        {handRaised ? 'Mano Levantada' : 'Levantar Mano'}
                     </button>
 
-                    {/* Toggle Chat Button */}
+                    {/* Chat Toggle */}
                     <button
                         onClick={() => setIsChatOpen(!isChatOpen)}
-                        className={`p-2 rounded-lg transition-colors ${isChatOpen ? 'bg-indigo-600 text-white' : 'bg-white/5 text-slate-400 hover:bg-white/10'}`}
-                        title={isChatOpen ? t.auditorium.toggleChat : t.auditorium.toggleChat}
+                        className={`p-2.5 rounded-full transition-all backdrop-blur-md border ${isChatOpen ? 'bg-white text-indigo-900 border-white shadow-lg' : 'bg-black/30 text-white border-white/10 hover:bg-black/50'}`}
                     >
-                        {isChatOpen ? <MessageSquareOff className="w-4 h-4" /> : <MessageSquare className="w-4 h-4" />}
+                        {isChatOpen ? <MessageSquareOff className="w-5 h-5" /> : <MessageSquare className="w-5 h-5" />}
                     </button>
                 </div>
             </nav>
 
-            <main className="flex-1 flex relative overflow-hidden">
-                {/* Main Stage (3D) - Auto resizes with flex */}
-                <div className={`transition-all duration-300 relative ${isChatOpen ? 'w-full md:w-[calc(100%-350px)]' : 'w-full'} h-full bg-black`}>
-                    <MainStageExperience streamUrl={streamUrl} isLive={isLive} />
-
-                    {/* Mobile Floating Controls */}
-                    {!isChatOpen && (
-                        <div className="absolute top-4 right-4 z-40 md:hidden">
-                            <div className="bg-black/50 backdrop-blur text-xs px-2 py-1 rounded border border-white/10">
-                                {t.auditorium.stageOnly}
-                            </div>
-                        </div>
-                    )}
+            {/* --- INTERACTION LAYERS --- */}
+            <div className="pointer-events-none absolute inset-0 z-10">
+                <ReactionOverlay roomId="main-auditorium" />
+                <div className="absolute top-20 left-6 w-80 pointer-events-auto">
+                    <PollsWidget userId={userId} roomId="main-auditorium" isAdmin={userEmail.includes('@')} />
                 </div>
+            </div>
 
-                {/* Sidebar (Chat) - Collapsible */}
-                <div
-                    className={`
-                        fixed md:relative top-[60px] md:top-0 right-0 bottom-0
-                        w-[85vw] md:w-[350px]
-                        bg-slate-900 border-l border-white/10 z-30
-                        transform transition-transform duration-300 ease-in-out
-                        ${isChatOpen ? 'translate-x-0' : 'translate-x-full md:hidden'}
-                    `}
-                >
-                    <ChatBox userEmail={userEmail} />
-                </div>
-            </main>
+            {/* --- CHAT DRAWER (Right Side) --- */}
+            <div
+                className={`
+                    absolute top-0 right-0 bottom-0
+                    w-[350px]
+                    bg-white
+                    shadow-[-10px_0_30px_rgba(0,0,0,0.1)]
+                    z-30
+                    transform transition-transform duration-500 cubic-bezier(0.16, 1, 0.3, 1)
+                    border-l border-slate-100
+                    ${isChatOpen ? 'translate-x-0' : 'translate-x-full'}
+                `}
+            >
+                <ChatBox userEmail={userEmail} />
+            </div>
         </div>
     )
 }
