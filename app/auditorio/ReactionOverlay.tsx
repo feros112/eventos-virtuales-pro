@@ -95,14 +95,14 @@ export default function ReactionOverlay({ roomId }: { roomId: string }) {
 
             {/* Reaction Buttons (Bottom Right) */}
             <div className="absolute bottom-6 right-6 md:right-20 flex flex-col-reverse gap-3 pointer-events-auto">
-                <div className="bg-black/60 backdrop-blur-md p-2 rounded-full flex flex-col gap-2 border border-white/10 shadow-xl">
+                <div className="bg-white/90 backdrop-blur-md p-2 rounded-full flex flex-col gap-2 border border-slate-200 shadow-xl">
                     {REACTIONS.map((r) => (
                         <button
                             key={r.type}
                             onClick={() => sendReaction(r.type)}
-                            className="p-2 hover:bg-white/20 rounded-full transition-transform active:scale-75 group"
+                            className="p-2 hover:bg-slate-100 rounded-full transition-transform active:scale-75 group"
                         >
-                            <r.icon className={`w-6 h-6 ${r.color} opacity-80 group-hover:opacity-100`} />
+                            <r.icon className={`w-6 h-6 ${r.color} opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all`} />
                         </button>
                     ))}
                 </div>
