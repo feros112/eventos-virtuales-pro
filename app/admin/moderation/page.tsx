@@ -3,6 +3,7 @@
 import { createClient } from '@/utils/supabase/client'
 import { useEffect, useState } from 'react'
 import { Hand, Check, X, Clock, RefreshCw } from 'lucide-react'
+import { useLanguage } from '@/app/context/LanguageContext'
 
 // Type definition for Interaction Event
 type InteractionEvent = {
@@ -21,6 +22,7 @@ export default function ModerationPage() {
     const [events, setEvents] = useState<InteractionEvent[]>([])
     const [loading, setLoading] = useState(true)
     const supabase = createClient()
+    const { t } = useLanguage()
 
     // Fetch initial data
     const fetchEvents = async () => {
@@ -47,7 +49,6 @@ export default function ModerationPage() {
                 { event: '*', schema: 'public', table: 'interaction_events', filter: "type=eq.raise_hand" },
                 (payload) => {
                     // Simple strategy: Just refetch on any change to keep list accurate
-                    // Or optimistic updates for better perf, but refetch is safer for now.
                     fetchEvents()
                 }
             )
@@ -56,7 +57,7 @@ export default function ModerationPage() {
         return () => {
             supabase.removeChannel(channel)
         }
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     // Actions
     const handleAction = async (id: string, action: 'approved' | 'dismissed') => {
@@ -70,7 +71,7 @@ export default function ModerationPage() {
 
         if (error) {
             console.error('Error updating status:', error)
-            alert('Error al actualizar estado')
+            alert(t.common.error || 'Error')
             fetchEvents() // Revert
         }
     }
@@ -80,16 +81,16 @@ export default function ModerationPage() {
             <header className="mb-8 flex justify-between items-center">
                 <div>
                     <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-amber-400 to-orange-600">
-                        Panel de Moderación
+                        {t.moderation.title}
                     </h1>
-                    <p className="text-slate-400">Control de sala y peticiones de palabra</p>
+                    <p className="text-slate-400">{t.moderation.handRaiseQueue}</p>
                 </div>
                 <div className="flex gap-4">
                     <button onClick={fetchEvents} className="p-2 bg-slate-800 rounded-full hover:bg-slate-700 transition-colors">
                         <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
                     </button>
                     <div className="bg-slate-800 px-4 py-2 rounded-lg border border-slate-700">
-                        <span className="text-slate-400 text-sm uppercase font-bold mr-2">En espera:</span>
+                        <span className="text-slate-400 text-sm uppercase font-bold mr-2">{t.moderation.handRaiseQueue}:</span>
                         <span className="text-2xl font-mono font-bold text-amber-500">{events.length}</span>
                     </div>
                 </div>
@@ -99,8 +100,8 @@ export default function ModerationPage() {
                 {events.length === 0 ? (
                     <div className="text-center py-20 border-2 border-dashed border-slate-800 rounded-2xl bg-slate-900/50">
                         <Hand className="w-16 h-16 mx-auto text-slate-700 mb-4" />
-                        <h2 className="text-xl font-bold text-slate-500">Todo tranquilo por aquí</h2>
-                        <p className="text-slate-600">No hay manos levantadas en este momento.</p>
+                        <h2 className="text-xl font-bold text-slate-500">{t.moderation.noHands}</h2>
+                        <p className="text-slate-600">{t.moderation.chatMonitor}</p>
                     </div>
                 ) : (
                     <div className="space-y-4">
@@ -111,7 +112,7 @@ export default function ModerationPage() {
                                         <Hand className="w-6 h-6 animate-pulse" />
                                     </div>
                                     <div>
-                                        <h3 className="font-bold text-lg text-white">{event.payload?.email || 'Usuario Desconocido'}</h3>
+                                        <h3 className="font-bold text-lg text-white">{event.payload?.email || t.moderation.user}</h3>
                                         <div className="flex items-center gap-2 text-xs text-slate-400 font-mono">
                                             <Clock className="w-3 h-3" />
                                             <span>{new Date(event.created_at).toLocaleTimeString()}</span>
@@ -127,14 +128,14 @@ export default function ModerationPage() {
                                         className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold transition-all border border-transparent hover:border-slate-600"
                                     >
                                         <X className="w-4 h-4" />
-                                        Descartar
+                                        {t.moderation.dismiss}
                                     </button>
                                     <button
                                         onClick={() => handleAction(event.id, 'approved')}
                                         className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold transition-all shadow-lg hover:shadow-emerald-500/20"
                                     >
                                         <Check className="w-4 h-4" />
-                                        Aprobar
+                                        {t.common.save}
                                     </button>
                                 </div>
                             </div>

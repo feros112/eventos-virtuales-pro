@@ -66,6 +66,48 @@ export const translations = {
             handRaised: "TU MANO LEVANTADA",
             stageOnly: "Solo Escenario",
             toggleChat: "Chat"
+        },
+        admin: {
+            dashboard: "Tablero",
+            users: "Usuarios",
+            video: "Video y Stream",
+            moderation: "Moderación",
+            sponsors: "Patrocinadores",
+            settings: "Configuración",
+            analytics: "Analíticas",
+            logout: "Cerrar Sesión",
+            title: "Panel de Administración",
+            welcome: "Bienvenido al Panel de Control",
+            quickStats: "Estadísticas Rápidas"
+        },
+        videoAdmin: {
+            title: "Gestión de Video",
+            currentStream: "Stream Actual",
+            streamUrl: "URL del Stream (HLS/M3U8)",
+            streamTitle: "Título del Evento",
+            isLive: "En Vivo",
+            updateBtn: "Actualizar Stream",
+            successUpdate: "Configuración actualizada correctamente"
+        },
+        moderation: {
+            title: "Moderación en Vivo",
+            handRaiseQueue: "Cola de Manos Levantadas",
+            chatMonitor: "Monitor de Chat",
+            clearQueue: "Limpiar Cola",
+            noHands: "No hay manos levantadas",
+            user: "Usuario",
+            time: "Hora",
+            action: "Acción",
+            dismiss: "Descartar"
+        },
+        common: {
+            save: "Guardar",
+            cancel: "Cancelar",
+            edit: "Editar",
+            delete: "Eliminar",
+            loading: "Cargando...",
+            error: "Error",
+            success: "Éxito"
         }
     },
     en: {
@@ -130,6 +172,48 @@ export const translations = {
             handRaised: "HAND RAISED",
             stageOnly: "Stage Only",
             toggleChat: "Toggle Chat"
+        },
+        admin: {
+            dashboard: "Dashboard",
+            users: "Users",
+            video: "Video & Stream",
+            moderation: "Moderation",
+            sponsors: "Sponsors",
+            settings: "Settings",
+            analytics: "Analytics",
+            logout: "Logout",
+            title: "Admin Panel",
+            welcome: "Welcome to Control Panel",
+            quickStats: "Quick Stats"
+        },
+        videoAdmin: {
+            title: "Video Management",
+            currentStream: "Current Stream",
+            streamUrl: "Stream URL (HLS/M3U8)",
+            streamTitle: "Event Title",
+            isLive: "Is Live",
+            updateBtn: "Update Stream",
+            successUpdate: "Configuration updated successfully"
+        },
+        moderation: {
+            title: "Live Moderation",
+            handRaiseQueue: "Hand Raise Queue",
+            chatMonitor: "Chat Monitor",
+            clearQueue: "Clear Queue",
+            noHands: "No hands raised",
+            user: "User",
+            time: "Time",
+            action: "Action",
+            dismiss: "Dismiss"
+        },
+        common: {
+            save: "Save",
+            cancel: "Cancel",
+            edit: "Edit",
+            delete: "Delete",
+            loading: "Loading...",
+            error: "Error",
+            success: "Success"
         }
     }
 }

@@ -5,20 +5,22 @@ import { Ban, Trash2, CheckCircle } from 'lucide-react'
 import { toggleBanUser, deleteUser } from './actions'
 import { useTransition } from 'react'
 import { useRouter } from 'next/navigation'
+import { useLanguage } from '@/app/context/LanguageContext'
 
 export default function UserRow({ user }: { user: any }) {
     const [isPending, startTransition] = useTransition()
     const router = useRouter()
+    const { t } = useLanguage()
 
     const handleBan = async () => {
-        if (confirm(`¿Estás seguro de cambiar el estado de ${user.email}?`)) {
+        if (confirm(`${t.common.edit} permissions for ${user.email}?`)) {
             await toggleBanUser(user.id, user.role)
             // Trigger refresh logic handled by action revalidate, but router refresh helps sometimes
         }
     }
 
     const handleDelete = async () => {
-        if (confirm(`¿Eliminar a ${user.email}? Esto no se puede deshacer.`)) {
+        if (confirm(`${t.common.delete} ${user.email}?`)) {
             await deleteUser(user.id)
         }
     }
@@ -48,8 +50,8 @@ export default function UserRow({ user }: { user: any }) {
             </td>
             <td className="p-4">
                 <span className={`px-2 py-1 rounded text-xs font-bold border ${user.role === 'admin' ? 'bg-rose-500/10 border-rose-500/50 text-rose-400' :
-                        user.role === 'banned' ? 'bg-slate-500/10 border-slate-500/50 text-slate-400' :
-                            'bg-emerald-500/10 border-emerald-500/50 text-emerald-400'
+                    user.role === 'banned' ? 'bg-slate-500/10 border-slate-500/50 text-slate-400' :
+                        'bg-emerald-500/10 border-emerald-500/50 text-emerald-400'
                     }`}>
                     {user.role}
                 </span>

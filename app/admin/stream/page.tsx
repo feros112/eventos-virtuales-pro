@@ -13,10 +13,6 @@ export default async function AdminStreamPage() {
 
     return (
         <div className="space-y-8">
-            <h1 className="text-3xl font-bold flex items-center gap-3">
-                <Video className="w-8 h-8 text-rose-500" /> Control de Streaming (Multiplex)
-            </h1>
-
             <StreamEditor initialRooms={rooms || []} />
         </div>
     )

@@ -1,4 +1,3 @@
-
 'use client'
 
 import { useState } from 'react'
@@ -7,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { clsx } from 'clsx'
 import { createClient } from '@/utils/supabase/client'
+import { useLanguage } from '@/app/context/LanguageContext'
 
 type StreamConfig = {
     id: number
@@ -23,6 +23,7 @@ export default function StreamEditor({ initialRooms }: { initialRooms: StreamCon
     const [loading, setLoading] = useState(false)
     const supabase = createClient()
     const router = useRouter()
+    const { t } = useLanguage()
 
     const activeRoom = rooms.find(r => r.id === selectedRoomId) || {
         stream_title: '',
@@ -47,27 +48,27 @@ export default function StreamEditor({ initialRooms }: { initialRooms: StreamCon
         try {
             if (typeof selectedRoomId === 'number') {
                 await supabase.from('stream_config').update(updates).eq('id', selectedRoomId)
-                alert('Sala actualizada correctamente')
+                alert(t.videoAdmin.successUpdate)
             } else {
                 const { data, error } = await supabase.from('stream_config').insert(updates).select().single()
                 if (error) throw error
                 if (data) {
                     setRooms([...rooms, data])
                     setSelectedRoomId(data.id)
-                    alert('Nueva sala creada')
+                    alert(t.common.success || 'Success')
                 }
             }
             router.refresh()
         } catch (error) {
             console.error(error)
-            alert('Error al guardar')
+            alert(t.common.error || 'Error')
         } finally {
             setLoading(false)
         }
     }
 
     const handleDelete = async () => {
-        if (typeof selectedRoomId === 'number' && confirm('¿Eliminar esta sala?')) {
+        if (typeof selectedRoomId === 'number' && confirm(t.common.delete + '?')) {
             await supabase.from('stream_config').delete().eq('id', selectedRoomId)
             setRooms(rooms.filter(r => r.id !== selectedRoomId))
             setSelectedRoomId(rooms[0]?.id || 'new')
@@ -77,6 +78,12 @@ export default function StreamEditor({ initialRooms }: { initialRooms: StreamCon
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div className="lg:col-span-12">
+                <h1 className="text-3xl font-bold flex items-center gap-3 mb-8">
+                    <Video className="w-8 h-8 text-rose-500" /> {t.videoAdmin.title}
+                </h1>
+            </div>
+
             {/* Sidebar List */}
             <div className="lg:col-span-3 space-y-4">
                 <button
@@ -88,7 +95,7 @@ export default function StreamEditor({ initialRooms }: { initialRooms: StreamCon
                             : "border-slate-700 bg-slate-900/50 text-slate-400 hover:border-slate-500 hover:text-white"
                     )}
                 >
-                    <Plus className="w-5 h-5" /> Nueva Sala
+                    <Plus className="w-5 h-5" /> {t.common.edit} / New
                 </button>
 
                 <div className="space-y-2">
@@ -127,10 +134,10 @@ export default function StreamEditor({ initialRooms }: { initialRooms: StreamCon
                 <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800">
                     <div className="flex justify-between items-center mb-6">
                         <h2 className="text-xl font-bold flex items-center gap-2">
-                            {typeof selectedRoomId === 'number' ? 'Editar Sala' : 'Crear Nueva Sala'}
+                            {typeof selectedRoomId === 'number' ? t.common.edit : t.common.save}
                             {typeof selectedRoomId === 'number' && (
                                 <a href={`/auditorio/${activeRoom.slug}`} target="_blank" className="text-xs font-normal text-rose-400 hover:text-rose-300 flex items-center gap-1 bg-rose-500/10 px-2 py-1 rounded-full">
-                                    Ver en vivo <ExternalLink className="w-3 h-3" />
+                                    Link <ExternalLink className="w-3 h-3" />
                                 </a>
                             )}
                         </h2>
@@ -144,30 +151,30 @@ export default function StreamEditor({ initialRooms }: { initialRooms: StreamCon
                     <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-4">
                             <div>
-                                <label className="block text-sm text-slate-400 mb-1">Título</label>
-                                <input name="stream_title" defaultValue={activeRoom.stream_title} required className="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-white focus:border-rose-500 outline-none" placeholder="Ej: Main Stage" />
+                                <label className="block text-sm text-slate-400 mb-1">{t.videoAdmin.streamTitle}</label>
+                                <input name="stream_title" defaultValue={activeRoom.stream_title} required className="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-white focus:border-rose-500 outline-none" placeholder="e.g. Main Stage" />
                             </div>
                             <div>
                                 <label className="block text-sm text-slate-400 mb-1">Slug (URL)</label>
-                                <input name="slug" defaultValue={activeRoom.slug} required className="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-white focus:border-rose-500 outline-none font-mono text-sm" placeholder="ej: main-stage" />
+                                <input name="slug" defaultValue={activeRoom.slug} required className="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-white focus:border-rose-500 outline-none font-mono text-sm" placeholder="e.g. main-stage" />
                             </div>
                             <div>
-                                <label className="block text-sm text-slate-400 mb-1">Imagen Miniatura (URL)</label>
+                                <label className="block text-sm text-slate-400 mb-1">Thumbnail (URL)</label>
                                 <input name="thumbnail_url" defaultValue={activeRoom.thumbnail_url || ''} className="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-white focus:border-rose-500 outline-none text-sm" placeholder="https://..." />
                             </div>
                             <div className="flex items-center gap-3 p-3 bg-slate-950 rounded-lg border border-slate-800">
                                 <input type="checkbox" name="is_live" defaultChecked={activeRoom.is_live} className="w-5 h-5 accent-rose-500" />
-                                <span className="font-bold text-sm">🔴 En Vivo</span>
+                                <span className="font-bold text-sm">🔴 {t.videoAdmin.isLive}</span>
                             </div>
                         </div>
 
                         <div className="space-y-4">
                             <div>
-                                <label className="block text-sm text-slate-400 mb-1">Stream Embed / URL</label>
+                                <label className="block text-sm text-slate-400 mb-1">{t.videoAdmin.streamUrl}</label>
                                 <textarea name="stream_url" defaultValue={activeRoom.stream_url} className="w-full h-40 bg-slate-950 border border-slate-700 rounded-lg p-3 text-white focus:border-rose-500 outline-none font-mono text-xs" placeholder="<iframe...>" />
                             </div>
                             <button disabled={loading} className="w-full bg-rose-600 hover:bg-rose-500 text-white font-bold py-3 rounded-xl transition-colors">
-                                {loading ? 'Guardando...' : 'Guardar Cambios'}
+                                {loading ? t.common.loading : t.common.save}
                             </button>
                         </div>
                     </form>
