@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 import { ArrowLeft, MessageSquare, Send, Users, Hand, MessageSquareOff, ChevronRight, ChevronLeft } from 'lucide-react'
 import Link from 'next/link'
 import ChatBox from '../ChatBox'
+import ReactionOverlay from '../ReactionOverlay'
+import PollsWidget from '../PollsWidget'
 import MainStageExperience from './MainStageExperience'
 import { createClient } from '@/utils/supabase/client'
 import { useLanguage } from '../../context/LanguageContext'
@@ -68,8 +70,16 @@ export default function AuditoriumLayout({ streamUrl, isLive, userEmail, userId,
         }
     }
 
+
+
     return (
         <div className="flex flex-col h-screen bg-slate-950 text-white overflow-hidden">
+            {/* Reaction Overlay (Global) */}
+            <ReactionOverlay roomId="main-auditorium" />
+
+            {/* Polls Widget (Global) */}
+            <PollsWidget userId={userId} roomId="main-auditorium" isAdmin={userEmail.includes('@')} />
+
             {/* Navbar (Client Header) */}
             <nav className="h-[60px] border-b border-white/10 bg-black/40 backdrop-blur-md px-4 flex justify-between items-center z-50 flex-shrink-0">
                 <div className="flex items-center gap-4">

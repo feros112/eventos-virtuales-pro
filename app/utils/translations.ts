@@ -65,7 +65,18 @@ export const translations = {
             raiseHand: "PEDIR LA PALABRA",
             handRaised: "TU MANO LEVANTADA",
             stageOnly: "Solo Escenario",
-            toggleChat: "Chat"
+            toggleChat: "Chat",
+            reactions: "Reacciones",
+            poll: {
+                title: "Encuesta Activa",
+                vote: "Votar",
+                voted: "¡Voto Registrado!",
+                close: "Cerrar Encuesta",
+                create: "Crear Encuesta",
+                question: "Pregunta",
+                options: "Opciones",
+                publish: "Publicar"
+            }
         },
         admin: {
             dashboard: "Tablero",
@@ -171,7 +182,18 @@ export const translations = {
             raiseHand: "RAISE HAND",
             handRaised: "HAND RAISED",
             stageOnly: "Stage Only",
-            toggleChat: "Toggle Chat"
+            toggleChat: "Toggle Chat",
+            reactions: "Reactions",
+            poll: {
+                title: "Active Poll",
+                vote: "Vote",
+                voted: "Vote Registered!",
+                close: "Close Poll",
+                create: "Create Poll",
+                question: "Question",
+                options: "Options",
+                publish: "Publish"
+            }
         },
         admin: {
             dashboard: "Dashboard",
