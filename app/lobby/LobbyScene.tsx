@@ -316,13 +316,8 @@ export default function LobbyScene({ openVideo }: { openVideo?: () => void }) {
                 />
 
                 {/* Controls - FREEDOM UNLOCKED */}
-                <OrbitControls
-                    target={[0, 5, 0]} // Middle of the plaza
-                    maxPolarAngle={Math.PI / 2 - 0.05} // Don't go below floor
-                    minDistance={5}
-                    maxDistance={40}
-                    enablePan={true}
-                />
+                {/* Controls - FREEDOM LOCKED (Cinematic Mode) */}
+                {/* OrbitControls Removed to fix navigation conflict */}
 
                 {/* --- STRUCTURES (Wrapped in Suspense to prevent texture crash) --- */}
                 <Suspense fallback={null}>

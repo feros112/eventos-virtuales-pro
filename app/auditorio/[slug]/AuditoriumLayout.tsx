@@ -20,6 +20,7 @@ export default function AuditoriumLayout({ streamUrl, isLive, userEmail, userId,
     const [isChatOpen, setIsChatOpen] = useState(true)
     const [handRaised, setHandRaised] = useState(false)
     const { t } = useLanguage()
+    const supabase = createClient()
 
     // 1. Check Initial State & Realtime Subscription
     useEffect(() => {
