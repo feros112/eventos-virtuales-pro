@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { motion, AnimatePresence } from 'framer-motion'
-import { BarChart3, CheckCircle, XCircle, Plus, Trophy } from 'lucide-react'
+import { BarChart3, CheckCircle, XCircle, Plus } from 'lucide-react'
 import { useLanguage } from '../context/LanguageContext'
 
 interface Poll {
@@ -128,7 +128,7 @@ export default function PollsWidget({ roomId, isAdmin = false, userId }: PollsWi
             .subscribe()
 
         return () => { supabase.removeChannel(channel) }
-    }, [userId, activePoll?.id]) // Re-subscribe if active poll changes context
+    }, [userId, activePoll?.id, supabase, roomId])
 
     // 2. Cast Vote
     const handleVote = async (index: number) => {
@@ -181,19 +181,19 @@ export default function PollsWidget({ roomId, isAdmin = false, userId }: PollsWi
                         initial={{ opacity: 0, x: 100 }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, scale: 0.9 }}
-                        className="bg-white/95 backdrop-blur-xl border border-slate-200 p-5 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.1)] w-[90vw] md:w-80 pointer-events-auto"
+                        className="bg-slate-950/60 backdrop-blur-2xl border border-white/10 p-6 rounded-[2rem] shadow-[0_20px_60px_rgba(0,0,0,0.6)] w-[90vw] md:w-80 pointer-events-auto"
                     >
-                        <div className="flex justify-between items-start mb-3">
-                            <h3 className="font-bold text-lg text-slate-800 leading-tight">{activePoll.question}</h3>
+                        <div className="flex justify-between items-start mb-4">
+                            <h3 className="font-extrabold text-lg text-white leading-tight uppercase tracking-tighter italic shadow-sm">{activePoll.question}</h3>
                             {isAdmin && (
-                                <button onClick={handleClosePoll} className="text-slate-400 hover:text-red-500">
-                                    <XCircle className="w-5 h-5" />
+                                <button onClick={handleClosePoll} className="text-white/20 hover:text-red-500 transition-colors">
+                                    <XCircle className="w-6 h-6" />
                                 </button>
                             )}
                         </div>
 
-                        <div className="space-y-2">
-                            {activePoll.options.map((option, idx) => {
+                        <div className="space-y-3">
+                            {activePoll.options.map((option: string, idx: number) => {
                                 const percentage = activePoll.totalVotes > 0
                                     ? Math.round((activePoll.votes[idx] / activePoll.totalVotes) * 100)
                                     : 0
@@ -203,26 +203,26 @@ export default function PollsWidget({ roomId, isAdmin = false, userId }: PollsWi
                                         key={idx}
                                         disabled={activePoll.hasVoted}
                                         onClick={() => handleVote(idx)}
-                                        className={`w-full relative overflow-hidden rounded-lg transition-all ${activePoll.hasVoted
-                                            ? 'bg-slate-100 cursor-default'
-                                            : 'bg-indigo-50 hover:bg-indigo-100 border border-indigo-200'
-                                            } p-3 text-left group`}
+                                        className={`w-full relative overflow-hidden rounded-xl transition-all border ${activePoll.hasVoted
+                                            ? 'bg-white/5 border-white/5 cursor-default'
+                                            : 'bg-white/10 hover:bg-white/20 border-white/10 hover:border-cyan-500/50 shadow-xl'
+                                            } p-4 text-left group`}
                                     >
                                         {/* Progress Bar Background */}
                                         {activePoll.hasVoted && (
                                             <motion.div
                                                 initial={{ width: 0 }}
                                                 animate={{ width: `${percentage}%` }}
-                                                className="absolute inset-y-0 left-0 bg-indigo-200/50 z-0"
+                                                className="absolute inset-y-0 left-0 bg-cyan-500/20 z-0"
                                             />
                                         )}
 
                                         <div className="relative z-10 flex justify-between items-center">
-                                            <span className={`font-medium ${activePoll.hasVoted ? 'text-slate-600' : 'text-slate-700 group-hover:text-indigo-700'}`}>
+                                            <span className={`text-sm font-bold uppercase tracking-widest ${activePoll.hasVoted ? 'text-white/70' : 'text-white group-hover:text-cyan-400'}`}>
                                                 {option}
                                             </span>
                                             {activePoll.hasVoted && (
-                                                <span className="text-xs font-bold text-indigo-600">{percentage}%</span>
+                                                <span className="text-xs font-black text-cyan-400 drop-shadow-[0_0_10px_rgba(6,182,212,0.5)]">{percentage}%</span>
                                             )}
                                         </div>
                                     </button>
@@ -231,9 +231,9 @@ export default function PollsWidget({ roomId, isAdmin = false, userId }: PollsWi
                         </div>
 
                         {activePoll.hasVoted && (
-                            <div className="mt-3 flex items-center gap-2 text-emerald-600 text-xs font-bold">
-                                <CheckCircle className="w-4 h-4" /> {t.auditorium.poll.voted}
-                                <span className="ml-auto text-slate-400">{activePoll.totalVotes} votes</span>
+                            <div className="mt-4 flex items-center gap-2 text-cyan-400 text-[10px] font-black uppercase tracking-[0.2em]">
+                                <CheckCircle className="w-4 h-4 shadow-sm" /> {t.auditorium.poll.voted}
+                                <span className="ml-auto text-white/20">{activePoll.totalVotes} VOTOS</span>
                             </div>
                         )}
                     </motion.div>
@@ -244,9 +244,9 @@ export default function PollsWidget({ roomId, isAdmin = false, userId }: PollsWi
                     <motion.button
                         layout
                         onClick={() => setIsCreating(true)}
-                        className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-full p-4 shadow-lg pointer-events-auto ring-4 ring-indigo-50"
+                        className="bg-cyan-500 hover:bg-white text-black rounded-2xl p-4 shadow-[0_0_30px_rgba(6,182,212,0.4)] pointer-events-auto transition-all active:scale-95 group"
                     >
-                        <BarChart3 className="w-6 h-6" />
+                        <BarChart3 className="w-6 h-6 group-hover:scale-110 transition-transform" />
                     </motion.button>
                 )}
 
@@ -256,18 +256,18 @@ export default function PollsWidget({ roomId, isAdmin = false, userId }: PollsWi
                         initial={{ opacity: 0, y: 50 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 50 }}
-                        className="bg-white border border-slate-200 p-4 rounded-xl w-[90vw] md:w-80 pointer-events-auto shadow-2xl"
+                        className="bg-slate-950/80 backdrop-blur-2xl border border-white/10 p-6 rounded-[2rem] w-[90vw] md:w-80 pointer-events-auto shadow-2xl"
                     >
-                        <div className="flex justify-between items-center mb-4">
-                            <h4 className="font-bold text-slate-800">{t.auditorium.poll.create}</h4>
-                            <button onClick={() => setIsCreating(false)}><XCircle className="w-5 h-5 text-slate-400 hover:text-slate-600" /></button>
+                        <div className="flex justify-between items-center mb-5">
+                            <h4 className="font-black text-white uppercase tracking-widest text-sm">{t.auditorium.poll.create}</h4>
+                            <button onClick={() => setIsCreating(false)}><XCircle className="w-5 h-5 text-white/20 hover:text-white" /></button>
                         </div>
-                        <form onSubmit={handleCreatePoll} className="space-y-3">
+                        <form onSubmit={handleCreatePoll} className="space-y-4">
                             <input
                                 placeholder={t.auditorium.poll.question}
                                 value={newQuestion}
                                 onChange={e => setNewQuestion(e.target.value)}
-                                className="w-full bg-slate-50 border border-slate-200 rounded p-2 text-sm text-slate-800 focus:ring-2 focus:ring-indigo-500 outline-none"
+                                className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm text-white placeholder-white/20 focus:ring-1 focus:ring-cyan-500 outline-none"
                                 required
                             />
                             {newOptions.map((opt, i) => (
@@ -280,18 +280,18 @@ export default function PollsWidget({ roomId, isAdmin = false, userId }: PollsWi
                                         newOpts[i] = e.target.value
                                         setNewOptions(newOpts)
                                     }}
-                                    className="w-full bg-slate-50 border border-slate-200 rounded p-2 text-sm text-slate-800 focus:ring-2 focus:ring-indigo-500 outline-none"
+                                    className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm text-white placeholder-white/20 focus:ring-1 focus:ring-cyan-500 outline-none"
                                     required
                                 />
                             ))}
                             <button
                                 type="button"
                                 onClick={() => setNewOptions([...newOptions, ''])}
-                                className="text-xs text-indigo-600 font-bold flex items-center gap-1 hover:underline"
+                                className="text-[10px] text-cyan-400 font-black uppercase tracking-widest flex items-center gap-1 hover:text-white transition-colors"
                             >
-                                <Plus className="w-3 h-3" /> Add Option
+                                <Plus className="w-3 h-3" /> Añadir Opción
                             </button>
-                            <button type="submit" className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 rounded text-sm shadow-md">
+                            <button type="submit" className="w-full bg-cyan-500 hover:bg-white text-black font-black uppercase tracking-widest py-4 rounded-xl text-xs shadow-[0_0_20px_rgba(6,182,212,0.3)] transition-all">
                                 {t.auditorium.poll.publish}
                             </button>
                         </form>

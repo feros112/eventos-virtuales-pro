@@ -94,15 +94,15 @@ export default function ReactionOverlay({ roomId }: { roomId: string }) {
             </AnimatePresence>
 
             {/* Reaction Buttons (Bottom Right) */}
-            <div className="absolute bottom-6 right-6 md:right-20 flex flex-col-reverse gap-3 pointer-events-auto">
-                <div className="bg-white/90 backdrop-blur-md p-2 rounded-full flex flex-col gap-2 border border-slate-200 shadow-xl">
+            <div className="absolute bottom-6 right-6 md:right-20 flex flex-col-reverse gap-4 pointer-events-auto">
+                <div className="bg-slate-950/60 backdrop-blur-2xl p-3 rounded-full flex flex-col gap-3 border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)]">
                     {REACTIONS.map((r) => (
                         <button
                             key={r.type}
                             onClick={() => sendReaction(r.type)}
-                            className="p-2 hover:bg-slate-100 rounded-full transition-transform active:scale-75 group"
+                            className="p-3 bg-white/5 hover:bg-white/10 rounded-full transition-all active:scale-75 group border border-white/5 hover:border-cyan-500/50"
                         >
-                            <r.icon className={`w-6 h-6 ${r.color} opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all`} />
+                            <r.icon className={`w-6 h-6 ${r.color} opacity-80 group-hover:opacity-100 group-hover:scale-125 transition-all drop-shadow-[0_0_8px_rgba(255,255,255,0.2)]`} />
                         </button>
                     ))}
                 </div>

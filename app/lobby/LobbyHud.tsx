@@ -1,92 +1,163 @@
 'use client'
 
-import React from 'react'
-import { LogOut, User, Calendar, MessageCircle, Map, Compass } from 'lucide-react'
-import Image from 'next/image'
+import { useState, useEffect } from 'react'
+import { Map, Compass, MessageCircle, LogOut } from 'lucide-react'
+import Link from 'next/link'
 
 interface LobbyHudProps {
-    userEmail?: string
-    onSignOut: () => void
-    onOpenChat: () => void
-    onOpenMap: () => void
-    onOpenQuickNav: () => void
+    onOpenFloorPlan?: () => void;
+    onOpenQuickNav?: () => void;
+    onOpenAgenda?: () => void;
+    onOpenProfile?: () => void;
+    onOpenChat?: () => void;
+    onSignOut?: () => void;
 }
 
-export default function LobbyHud({ userEmail, onSignOut, onOpenChat, onOpenMap, onOpenQuickNav }: LobbyHudProps) {
-    return (
-        <div className="absolute inset-0 pointer-events-none flex flex-col justify-between z-50">
-            {/* --- TOP BAR --- */}
-            <header className="bg-white/95 backdrop-blur-sm h-16 px-6 flex items-center justify-between border-b border-slate-200 shadow-sm pointer-events-auto">
-                {/* Logo Area */}
-                <div className="flex items-center gap-2">
-                    <h1 className="text-2xl font-black tracking-tighter text-indigo-600">
-                        BEYOND<span className="text-slate-900 font-light">LIVE</span>
-                    </h1>
-                </div>
+export default function LobbyHud({ onOpenFloorPlan, onOpenQuickNav, onOpenAgenda, onOpenProfile, onOpenChat, onSignOut }: LobbyHudProps) {
+    const [currentTime, setCurrentTime] = useState('');
 
-                {/* Right Navigation */}
-                <nav className="flex items-center gap-6 text-sm font-medium text-slate-600">
-                    <button className="hover:text-indigo-600 transition-colors flex items-center gap-2">
-                        <Calendar className="w-4 h-4" /> Agenda
+    useEffect(() => {
+        const updateTime = () => {
+            const now = new Date();
+            setCurrentTime(now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+        };
+        updateTime();
+        const interval = setInterval(updateTime, 1000);
+        return () => clearInterval(interval);
+    }, []);
+
+    const navButtonStyle = {
+        background: 'none',
+        border: 'none',
+        padding: '0.5rem 1.2rem',
+        color: 'white',
+        fontSize: '0.85rem',
+        fontWeight: 900,
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.6rem',
+        textTransform: 'uppercase' as const,
+        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        letterSpacing: '0.1em',
+    };
+
+    const bottomNavStyle = {
+        background: 'rgba(255,255,255,0.05)',
+        border: '1px solid rgba(255,255,255,0.1)',
+        padding: '0.6rem 1.5rem',
+        color: 'white',
+        fontSize: '0.8rem',
+        fontWeight: 800,
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.75rem',
+        borderRadius: '2rem',
+        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        textTransform: 'uppercase' as const,
+        letterSpacing: '0.1em',
+    }
+
+    return (
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', pointerEvents: 'none', fontFamily: 'Inter, sans-serif', zIndex: 1000 }}>
+
+            {/* --- TOP BAR --- */}
+            <div style={{
+                height: '80px',
+                backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                backdropFilter: 'blur(12px)',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: '0 3rem',
+                pointerEvents: 'auto',
+                borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.3)'
+            }}>
+                {/* Event Logo & Back Link */}
+                <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                    <div style={{ fontSize: '1.4rem', fontWeight: 1000, color: 'white', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                        EXPO EVENTOS <span style={{ color: '#06b6d4', textShadow: '0 0 10px rgba(6,182,212,0.5)' }}>360 PRO</span>
+                    </div>
+                </Link>
+
+                {/* Top Nav Buttons */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                    <button onClick={onOpenAgenda} style={navButtonStyle} className="hud-nav-btn">
+                        Agenda
                     </button>
-                    <button className="hover:text-indigo-600 transition-colors flex items-center gap-2">
-                        <User className="w-4 h-4" /> Profile
+                    <button onClick={onOpenProfile} style={navButtonStyle} className="hud-nav-btn">
+                        Profile
                     </button>
                     <button
                         onClick={onSignOut}
-                        className="hover:text-red-600 transition-colors flex items-center gap-2"
+                        style={{ ...navButtonStyle, color: 'rgba(255,255,255,0.6)' }}
+                        className="hud-nav-btn"
                     >
-                        <LogOut className="w-4 h-4" /> Logout
+                        Logout
                     </button>
-                </nav>
-            </header>
-
-            {/* --- CENTER AREA (Transparent for 3D) --- */}
-            <div className="flex-1 relative">
-                {/* Optional: Add minimal overlays here if needed (e.g. notifications) */}
+                </div>
             </div>
 
             {/* --- BOTTOM BAR --- */}
-            <footer className="bg-white/95 backdrop-blur-sm h-16 px-6 flex items-center justify-between border-t border-slate-200 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] pointer-events-auto">
-                {/* Left Actions */}
-                <div className="flex items-center gap-6">
-                    <button
-                        onClick={onOpenQuickNav}
-                        className="flex items-center gap-2 text-slate-700 hover:text-indigo-600 font-bold transition-colors group"
-                    >
-                        <div className="bg-indigo-100 p-2 rounded-full group-hover:bg-indigo-600 group-hover:text-white transition-colors">
-                            <Compass className="w-5 h-5" />
-                        </div>
+            <div style={{
+                height: '85px',
+                backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                backdropFilter: 'blur(12px)',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: '0 3rem',
+                pointerEvents: 'auto',
+                borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+                boxShadow: '0 -4px 20px rgba(0,0,0,0.3)'
+            }}>
+                {/* Left: Quick Nav & Floor Plan */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+                    <button onClick={onOpenQuickNav} style={bottomNavStyle} className="hud-bottom-btn">
+                        <Compass size={18} color="#06b6d4" />
                         Quick Nav
                     </button>
-                    <button
-                        onClick={onOpenMap}
-                        className="flex items-center gap-2 text-slate-700 hover:text-indigo-600 font-bold transition-colors group"
-                    >
-                        <div className="bg-indigo-100 p-2 rounded-full group-hover:bg-indigo-600 group-hover:text-white transition-colors">
-                            <Map className="w-5 h-5" />
-                        </div>
+                    <button onClick={onOpenFloorPlan} style={bottomNavStyle} className="hud-bottom-btn">
+                        <Map size={18} color="#06b6d4" />
                         Floor Plan
                     </button>
                 </div>
 
-                {/* Center Branding */}
-                <div className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2">
-                    <span className="text-xl font-bold text-slate-800 tracking-widest uppercase opacity-80">
-                        ProGlobal<span className="text-indigo-600">Events</span>
+                {/* Center: Platform Logo */}
+                <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.1rem', opacity: 0.8 }}>
+                    <span style={{ fontSize: '1.1rem', fontWeight: 900, color: 'white', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+                        IWEBOLUTIONS <span style={{ color: '#06b6d4' }}>PLATFORM</span>
                     </span>
-                </div>
+                </Link>
 
-                {/* Right Actions */}
-                <div className="flex items-center gap-4">
-                    <button
-                        onClick={onOpenChat}
-                        className="flex items-center gap-2 text-slate-700 hover:text-indigo-600 font-bold transition-colors"
-                    >
-                        Chat <MessageCircle className="w-5 h-5 text-indigo-600" />
-                    </button>
-                </div>
-            </footer>
+                {/* Right: Chat */}
+                <button
+                    onClick={onOpenChat}
+                    style={{
+                        ...bottomNavStyle,
+                        backgroundColor: '#06b6d4',
+                        color: 'black',
+                        border: 'none',
+                        boxShadow: '0 0 20px rgba(6,182,212,0.3)'
+                    }}
+                    className="hud-chat-btn"
+                >
+                    Chat
+                    <MessageCircle size={22} color="black" fill="black" />
+                </button>
+            </div>
+
+            <style jsx>{`
+                button {
+                    transition: all 0.2s ease;
+                }
+                button:hover {
+                    opacity: 0.7;
+                    transform: translateY(-1px);
+                }
+            `}</style>
         </div>
     )
 }

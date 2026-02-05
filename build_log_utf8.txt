@@ -1,0 +1,33 @@
+﻿
+> virtual-event-platform@0.1.0 build
+> next build
+
+Γû▓ Next.js 16.1.1 (Turbopack)
+- Environments: .env.local
+
+node.exe : ΓÜá The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: 
+https://nextjs.org/docs/messages/middleware-to-proxy
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ΓÜá The "middle...leware-to-proxy:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  Creating an optimized production build ...
+Γ£ô Compiled successfully in 4.1s
+  Running TypeScript ...
+Failed to compile.
+
+./app/login/AuthUi.tsx:122:30
+Type error: Cannot find name 'Link'.
+
+[0m [90m 120 |[39m                             [33m<[39m[33m/[39m[33mbutton[39m[33m>[39m
+ [90m 121 |[39m
+[31m[1m>[22m[39m[90m 122 |[39m                             [33m<[39m[33mLink[39m
+ [90m     |[39m                              [31m[1m^[22m[39m
+ [90m 123 |[39m                                 href[33m=[39m[32m"/"[39m
+ [90m 124 |[39m                                 className[33m=[39m[32m"w-full py-6 text-slate-300 hover:text-slate-950 hover:bg-slate-50 
+border border-transparent font-black text-[10px] uppercase tracking-widest rounded-[24px] transition-all flex items-center justify-center 
+gap-3"[39m
+ [90m 125 |[39m                             [33m>[39m[0m
+Next.js build worker exited with code: 1 and signal: null

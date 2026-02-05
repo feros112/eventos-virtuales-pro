@@ -44,6 +44,9 @@ export default async function AuditorioPage({ params }: { params: Promise<{ slug
             userEmail={user.email!}
             userId={user.id}
             streamTitle={config.stream_title}
+            slidesUrl={config.slides_url}
+            currentSlide={config.current_slide}
+            totalSlides={config.total_slides}
         />
     )
 }

@@ -1,129 +1,117 @@
 'use client'
 
-import { X, MousePointer, Hand, Move, Maximize, Scroll, GripHorizontal } from 'lucide-react'
+import React from 'react'
+import { X, Mouse, Move, ZoomIn, Hand, GripHorizontal, Maximize } from 'lucide-react'
+import { useLanguage } from '../context/LanguageContext'
 
 export default function InstructionsOverlay({ onClose }: { onClose: () => void }) {
-    return (
-        <div className="fixed inset-0 z-50 bg-black/90 flex flex-col items-center justify-center text-white backdrop-blur-sm p-6 overflow-y-auto">
+    const { t } = useLanguage()
 
-            {/* Close Button */}
+    return (
+        <div className="fixed inset-0 z-[100] bg-black/70 flex flex-col items-center justify-center text-white backdrop-blur-sm p-4 animate-in fade-in duration-500">
+            {/* Close Button Top Right */}
             <button
                 onClick={onClose}
-                className="absolute top-6 right-6 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+                className="absolute top-6 right-6 text-white hover:text-indigo-400 p-2 transition-colors z-[110]"
             >
-                <X className="w-8 h-8" />
+                <X className="w-10 h-10 stroke-[3px]" />
             </button>
 
-            <div className="max-w-6xl w-full">
-                {/* Header */}
-                <div className="text-center mb-16">
-                    <h2 className="text-3xl md:text-5xl font-bold mb-4 tracking-tight">HOW TO NAVIGATE</h2>
-                    <p className="text-slate-400 text-lg">Master the controls to explore the virtual space.</p>
+            <div className="max-w-7xl w-full flex flex-col gap-12">
+
+                {/* --- MOBILE NAVIGATION (TOP ROW) --- */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center items-start">
+                    <div className="flex flex-col items-center gap-4">
+                        <div className="text-[10px] font-black tracking-[0.3em] uppercase opacity-80 mb-2">{t.lobby.instructions.lookTouch}</div>
+                        <div className="relative w-32 h-20 border-2 border-white/20 rounded-xl flex items-center justify-center bg-white/5">
+                            <Hand className="w-12 h-12 stroke-[1.5px] animate-bounce-horizontal" />
+                            <div className="absolute inset-0 flex items-center justify-between px-2">
+                                <div className="w-1 h-8 bg-white/20 rounded-full" />
+                                <div className="w-1 h-8 bg-white/20 rounded-full" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="flex flex-col items-center gap-4">
+                        <div className="text-[10px] font-black tracking-[0.3em] uppercase opacity-80 mb-2">{t.lobby.instructions.moveTouch}</div>
+                        <div className="relative w-32 h-20 border-2 border-white/20 rounded-xl flex items-center justify-center bg-white/5">
+                            <GripHorizontal className="w-12 h-12 stroke-[1.5px]" />
+                        </div>
+                    </div>
+
+                    <div className="flex flex-col items-center gap-4">
+                        <div className="text-[10px] font-black tracking-[0.3em] uppercase opacity-80 mb-2">{t.lobby.instructions.zoomTouch}</div>
+                        <div className="relative w-32 h-20 border-2 border-white/20 rounded-xl flex items-center justify-center bg-white/5">
+                            <Maximize className="w-12 h-12 stroke-[1.5px] animate-pulse" />
+                        </div>
+                    </div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 relative">
+                {/* --- CENTER DIVIDER LABEL --- */}
+                <div className="relative flex items-center justify-center">
+                    <div className="absolute w-full h-px bg-white/10" />
+                    <span className="relative z-10 bg-black/80 px-6 py-2 rounded-full text-xs font-black tracking-[0.5em] uppercase border border-white/10">{t.lobby.instructions.mobileTitle}</span>
+                </div>
 
-                    {/* Divider for Desktop */}
-                    <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-white/20 to-transparent" />
-
-                    {/* --- MOBILE CONTROLS --- */}
-                    <div className="space-y-12">
-                        <div className="text-center mb-8">
-                            <h3 className="text-2xl font-bold text-cyan-400 uppercase tracking-widest mb-2">Touch Devices</h3>
-                            <p className="text-xs font-mono text-slate-500">SMARTPHONE / TABLET</p>
-                        </div>
-
-                        <div className="grid gap-8">
-                            {/* Drag to Look */}
-                            <div className="flex items-center gap-6 bg-white/5 p-6 rounded-2xl border border-white/5">
-                                <div className="w-20 h-20 bg-cyan-500/10 rounded-full flex items-center justify-center shrink-0">
-                                    <Hand className="w-10 h-10 text-cyan-400 animate-pulse" />
+                {/* --- MOUSE NAVIGATION (BOTTOM ROW) --- */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center items-start">
+                    <div className="flex flex-col items-center gap-4">
+                        <div className="text-[10px] font-black tracking-[0.3em] uppercase opacity-80 mb-2">{t.lobby.instructions.lookClick}</div>
+                        <div className="relative w-32 h-20 flex items-center justify-center">
+                            <div className="relative">
+                                <Mouse className="w-14 h-14 stroke-[1.5px]" />
+                                <div className="absolute top-1/2 left-0 -translate-x-full -translate-y-1/2 px-2">
+                                    <div className="w-4 h-0.5 bg-white/40" />
                                 </div>
-                                <div>
-                                    <h4 className="text-xl font-bold mb-1">Look Around</h4>
-                                    <p className="text-slate-400 text-sm">Touch and drag your finger across the screen to rotate your view.</p>
-                                </div>
-                            </div>
-
-                            {/* Move */}
-                            <div className="flex items-center gap-6 bg-white/5 p-6 rounded-2xl border border-white/5">
-                                <div className="w-20 h-20 bg-cyan-500/10 rounded-full flex items-center justify-center shrink-0">
-                                    <GripHorizontal className="w-10 h-10 text-cyan-400" />
-                                </div>
-                                <div>
-                                    <h4 className="text-xl font-bold mb-1">Move Around</h4>
-                                    <p className="text-slate-400 text-sm">Tap on the floor squares or specific points of interest to walk there.</p>
-                                </div>
-                            </div>
-
-                            {/* Zoom */}
-                            <div className="flex items-center gap-6 bg-white/5 p-6 rounded-2xl border border-white/5">
-                                <div className="w-20 h-20 bg-cyan-500/10 rounded-full flex items-center justify-center shrink-0">
-                                    <Maximize className="w-10 h-10 text-cyan-400" />
-                                </div>
-                                <div>
-                                    <h4 className="text-xl font-bold mb-1">Zoom In/Out</h4>
-                                    <p className="text-slate-400 text-sm">Pinch with two fingers to zoom in or zoom out of the view.</p>
+                                <div className="absolute top-1/2 right-0 translate-x-full -translate-y-1/2 px-2">
+                                    <div className="w-4 h-0.5 bg-white/40" />
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    {/* --- PC CONTROLS --- */}
-                    <div className="space-y-12">
-                        <div className="text-center mb-8">
-                            <h3 className="text-2xl font-bold text-indigo-400 uppercase tracking-widest mb-2">Desktop</h3>
-                            <p className="text-xs font-mono text-slate-500">MOUSE & KEYBOARD</p>
-                        </div>
-
-                        <div className="grid gap-8">
-                            {/* Drag to Look */}
-                            <div className="flex items-center gap-6 bg-white/5 p-6 rounded-2xl border border-white/5">
-                                <div className="w-20 h-20 bg-indigo-500/10 rounded-full flex items-center justify-center shrink-0">
-                                    <MousePointer className="w-10 h-10 text-indigo-400" />
-                                </div>
-                                <div>
-                                    <h4 className="text-xl font-bold mb-1">Look Around</h4>
-                                    <p className="text-slate-400 text-sm">Click and drag with your mouse left or right to rotate the camera.</p>
-                                </div>
-                            </div>
-
-                            {/* Move */}
-                            <div className="flex items-center gap-6 bg-white/5 p-6 rounded-2xl border border-white/5">
-                                <div className="w-20 h-20 bg-indigo-500/10 rounded-full flex items-center justify-center shrink-0">
-                                    <Move className="w-10 h-10 text-indigo-400" />
-                                </div>
-                                <div>
-                                    <h4 className="text-xl font-bold mb-1">Move Around</h4>
-                                    <p className="text-slate-400 text-sm">Click on the floor markers to navigate to different areas.</p>
-                                </div>
-                            </div>
-
-                            {/* Zoom */}
-                            <div className="flex items-center gap-6 bg-white/5 p-6 rounded-2xl border border-white/5">
-                                <div className="w-20 h-20 bg-indigo-500/10 rounded-full flex items-center justify-center shrink-0">
-                                    <Scroll className="w-10 h-10 text-indigo-400" />
-                                </div>
-                                <div>
-                                    <h4 className="text-xl font-bold mb-1">Zoom In/Out</h4>
-                                    <p className="text-slate-400 text-sm">Use your mouse scroll wheel to zoom in and out.</p>
+                    <div className="flex flex-col items-center gap-4">
+                        <div className="text-[10px] font-black tracking-[0.3em] uppercase opacity-80 mb-2">{t.lobby.instructions.moveClick}</div>
+                        <div className="relative w-32 h-20 flex items-center justify-center">
+                            <div className="relative">
+                                <Mouse className="w-14 h-14 stroke-[1.5px]" />
+                                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-full py-2">
+                                    <div className="w-3 h-3 border-t-2 border-r-2 border-white/40 rotate-[135deg]" />
                                 </div>
                             </div>
                         </div>
                     </div>
 
+                    <div className="flex flex-col items-center gap-4">
+                        <div className="text-[10px] font-black tracking-[0.3em] uppercase opacity-80 mb-2">{t.lobby.instructions.zoomScroll}</div>
+                        <div className="relative w-32 h-20 flex items-center justify-center">
+                            <div className="relative">
+                                <Mouse className="w-14 h-14 stroke-[1.5px]" />
+                                <div className="absolute top-1/4 left-1/2 -translate-x-1/2 p-1">
+                                    <div className="w-4 h-4 rounded-full border-2 border-indigo-400 animate-ping" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div className="mt-16 text-center">
+                <div className="relative flex items-center justify-center">
+                    <div className="absolute w-full h-px bg-white/10" />
+                    <span className="relative z-10 bg-black/80 px-6 py-2 rounded-full text-xs font-black tracking-[0.5em] uppercase border border-white/10">{t.lobby.instructions.mouseTitle}</span>
+                </div>
+
+                {/* --- FOOTER BUTTON --- */}
+                <div className="flex justify-center mt-4">
                     <button
                         onClick={onClose}
-                        className="px-12 py-4 bg-white text-black font-black text-lg uppercase tracking-widest rounded-full hover:scale-105 transition-transform shadow-[0_0_40px_rgba(255,255,255,0.3)]"
+                        className="px-12 py-3 bg-white hover:bg-indigo-50 text-slate-900 font-black text-sm uppercase tracking-widest rounded-full transition-all shadow-[0_0_50px_rgba(255,255,255,0.2)] hover:scale-105 active:scale-95"
                     >
-                        Enter Experience
+                        {t.lobby.instructions.gotIt}
                     </button>
-                    <p className="mt-4 text-xs text-slate-500 animate-pulse">Click anywhere to close</p>
                 </div>
+
             </div>
         </div>
     )
 }
+

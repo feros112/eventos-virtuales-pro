@@ -36,9 +36,19 @@ export async function updateSession(request: NextRequest) {
         data: { user },
     } = await supabase.auth.getUser()
 
+    // Allow bypass for Demo/Guest routes
+    const isDemoRoute =
+        request.nextUrl.pathname.startsWith('/lobby') ||
+        request.nextUrl.pathname.startsWith('/expo') ||
+        request.nextUrl.pathname.startsWith('/escape-room') ||
+        request.nextUrl.pathname.startsWith('/workshops') ||
+        request.nextUrl.pathname.startsWith('/auditorio') ||
+        request.nextUrl.pathname.startsWith('/experiencia')
+
     // Protect routes validation
     if (
         !user &&
+        !isDemoRoute &&
         !request.nextUrl.pathname.startsWith('/login') &&
         !request.nextUrl.pathname.startsWith('/auth') &&
         request.nextUrl.pathname !== '/' // Allow Landing Page

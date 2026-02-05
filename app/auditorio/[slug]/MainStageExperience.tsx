@@ -1,54 +1,27 @@
 'use client'
 
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Text, Html, ContactShadows, useTexture, OrbitControls, MeshReflectorMaterial, SpotLight, Environment } from '@react-three/drei'
+import { Text, Html, ContactShadows, useTexture, OrbitControls, MeshReflectorMaterial, SpotLight, Environment, Image } from '@react-three/drei'
 import { EffectComposer, Bloom, Vignette, ToneMapping, Noise } from '@react-three/postprocessing'
 import React, { useState, useRef, useMemo, useEffect } from 'react'
 import * as THREE from 'three'
 
 // --- COMPONENTS ---
 
-// 1. Modern Conference Mannequin (Frosted Glass)
-function AudienceMember({ position }: { position: [number, number, number] }) {
-    return (
-        <group position={position}>
-            <mesh position={[0, 0.45, 0]}>
-                <capsuleGeometry args={[0.2, 0.9, 4]} />
-                <meshPhysicalMaterial
-                    color="#e2e8f0"
-                    transmission={0.5}
-                    opacity={0.7}
-                    roughness={0.3}
-                    transparent
-                />
-            </mesh>
-            <mesh position={[0, 1, 0]}>
-                <sphereGeometry args={[0.15]} />
-                <meshPhysicalMaterial
-                    color="#cbd5e1"
-                    transmission={0.5}
-                    opacity={0.8}
-                    roughness={0.3}
-                    transparent
-                />
-            </mesh>
-        </group>
-    )
-}
-
-function InstancedAudience() {
-    // Generate crowd positions in a curve
-    const crowd = useMemo(() => {
+// 1. Realistic Seating Array (Inspired by Reference Image 4)
+function SeatingArea() {
+    const seats = useMemo(() => {
         const items = []
-        for (let r = 0; r < 8; r++) {
-            for (let c = -15; c <= 15; c++) {
-                if (Math.random() > 0.3) { // 70% occupancy
-                    const radius = 12 + r * 1.8
-                    const angle = c * 0.08
-                    const x = Math.sin(angle) * radius
-                    const z = Math.cos(angle) * radius - 2 // Offset
-                    items.push([x, 0, z] as [number, number, number])
-                }
+        const rows = 12
+        for (let r = 0; r < rows; r++) {
+            const rowRadius = 18 + r * 1.5
+            const rowCount = 24 + r * 3
+            const angleSpan = Math.PI * 0.85
+            for (let c = 0; c < rowCount; c++) {
+                const angle = (c / (rowCount - 1) - 0.5) * angleSpan
+                const x = Math.sin(angle) * rowRadius
+                const z = Math.cos(angle) * rowRadius + 8
+                items.push({ pos: [x, r * 0.4, z] as [number, number, number], rot: [0, angle, 0] })
             }
         }
         return items
@@ -56,162 +29,208 @@ function InstancedAudience() {
 
     return (
         <group>
-            {crowd.map((pos, i) => (
-                <AudienceMember key={i} position={pos} />
+            {seats.map((seat, i) => (
+                <group key={i} position={seat.pos} rotation={seat.rot as [number, number, number]}>
+                    {/* Chair Base */}
+                    <mesh position={[0, 0.2, 0]}>
+                        <boxGeometry args={[0.7, 0.5, 0.7]} />
+                        <meshStandardMaterial color="#0f172a" roughness={0.3} />
+                    </mesh>
+                    {/* Chair Backrest with Accent Light */}
+                    <mesh position={[0, 0.8, -0.3]}>
+                        <boxGeometry args={[0.7, 1.2, 0.1]} />
+                        <meshStandardMaterial color="#1e293b" emissive="#00f3ff" emissiveIntensity={0.05} />
+                    </mesh>
+                    {/* Seat Light Glow (Image Reference) */}
+                    <pointLight position={[0, 0.5, 0.5]} intensity={0.1} color="#3b82f6" distance={2} />
+                </group>
             ))}
         </group>
     )
 }
 
-// 2. The Main Screen (Bezel-less)
-function MainScreen({ streamUrl, isLive }: { streamUrl: string, isLive: boolean }) {
+// 2. IMAX Curved Screen (Massive Scale)
+function CurvedScreen({ streamUrl, isLive }: { streamUrl: string, isLive: boolean }) {
+    const screenRef = useRef<THREE.Group>(null)
+
     return (
-        <group position={[0, 4, -8]}>
-            {/* Screen Surface */}
-            <mesh>
-                <planeGeometry args={[16, 9]} />
-                <meshBasicMaterial color="#000" />
+        <group position={[0, 8, -15]} ref={screenRef}>
+            {/* Screen Geometry (Curved) */}
+            <mesh rotation={[0, Math.PI, 0]}>
+                <cylinderGeometry args={[25, 25, 12, 64, 1, true, -Math.PI / 4, Math.PI / 2]} />
+                <meshStandardMaterial color="#000" side={THREE.BackSide} metalness={1} roughness={0} />
             </mesh>
 
-            {/* Back Glow */}
-            <mesh position={[0, 0, -0.1]}>
-                <planeGeometry args={[16.5, 9.5]} />
-                <meshBasicMaterial color="#1d4ed8" transparent opacity={0.5} />
-            </mesh>
-            <pointLight position={[0, 0, -2]} intensity={2} color="#3b82f6" distance={15} />
-
-            {/* HTML Embed */}
+            {/* Content Slot */}
             <Html
                 transform
-                occlude="blending"
-                position={[0, 0, 0.05]}
-                style={{ width: '1280px', height: '720px', background: 'black' }}
-                scale={0.125}
+                distanceFactor={12}
+                position={[0, 0, 0.1]}
+                className="bg-black/90 overflow-hidden rounded-xl border-4 border-white/5 shadow-[0_0_150px_rgba(0,243,255,0.2)]"
             >
-                <div className="w-full h-full bg-black flex items-center justify-center">
-                    {isLive && streamUrl ? (
-                        streamUrl.startsWith('<') ? (
-                            <div className="w-full h-full" dangerouslySetInnerHTML={{ __html: streamUrl }} />
-                        ) : (
-                            <iframe
-                                width="100%"
-                                height="100%"
-                                src={streamUrl}
-                                title="Live Stream"
-                                className="w-full h-full object-cover"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen
-                            />
-                        )
+                <div style={{ width: '1920px', height: '1080px', backgroundColor: '#020617', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                    {isLive ? (
+                        <iframe
+                            width="100%"
+                            height="100%"
+                            src={streamUrl.includes('youtube') ? `${streamUrl}?autoplay=1&mute=0` : streamUrl}
+                            title="Auditorium Stream"
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                        />
                     ) : (
-                        <div className="flex flex-col items-center justify-center text-white h-full bg-slate-900 w-full">
-                            <h1 className="text-4xl font-black text-slate-700 tracking-widest uppercase">No Signal</h1>
+                        <div className="flex flex-col items-center">
+                            <h2 className="text-[120px] font-black text-white tracking-widest uppercase mb-4 opacity-20">EVENTOS PRO</h2>
+                            <p className="text-[40px] font-bold text-cyan-400 tracking-[1em] uppercase">SISTEMA EN ESPERA</p>
                         </div>
                     )}
                 </div>
             </Html>
+
+            {/* Neon Border Glow */}
+            <mesh position={[0, 0, -0.2]}>
+                <cylinderGeometry args={[25.1, 25.1, 12.1, 64, 1, true, -Math.PI / 4, Math.PI / 2]} />
+                <meshBasicMaterial color="#00f3ff" side={THREE.BackSide} transparent opacity={0.3} />
+            </mesh>
         </group>
     )
 }
 
-// 3. Stage Architecture (Wood & Steel)
-function StageArchitecture() {
+// 3. Stage & Architecture (The BeyondLive Look)
+function AuditoriumArchitecture() {
     return (
         <group>
-            {/* Main Podium Floor (Glossy White) */}
-            <mesh position={[0, 0.6, -8]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-                <cylinderGeometry args={[12, 11, 1, 64]} />
+            {/* Reflective Ground (Polished Pavement from Image 4) */}
+            <mesh position={[0, -0.1, 10]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+                <planeGeometry args={[100, 100]} />
                 {/* @ts-ignore */}
                 <MeshReflectorMaterial
                     blur={[300, 100]}
                     resolution={1024}
                     mixBlur={1}
-                    mixStrength={30}
-                    roughness={0.2}
-                    color="#f1f5f9" // White floor
-                    metalness={0.1}
+                    mixStrength={50}
+                    roughness={0.15}
+                    depthScale={1.2}
+                    minDepthThreshold={0.4}
+                    maxDepthThreshold={1.4}
+                    color="#020617"
+                    metalness={0.8}
                 />
             </mesh>
 
-            {/* Backdrop / Acoustic Panels */}
-            {[-1, 1].map((side, i) => (
-                <group key={i} position={[side * 14, 5, -8]} rotation={[0, -side * 0.3, 0]}>
-                    <mesh>
-                        <boxGeometry args={[8, 12, 0.5]} />
-                        <meshStandardMaterial color="#334155" roughness={0.8} /> {/* Dark gray slate */}
-                    </mesh>
-                    {/* Wood slats */}
-                    {[...Array(10)].map((_, j) => (
-                        <mesh key={j} position={[0, 0, 0.3 + j * 0.01]} rotation={[0, 0, 0]} renderOrder={1}>
-                            <boxGeometry args={[0.4, 12, 0.1]} />
-                            <meshStandardMaterial color="#d97706" /> {/* Wood color */}
-                        </mesh>
-                    ))}
-                </group>
-            ))}
+            {/* Stage Deck */}
+            <mesh position={[0, 0.4, -12]}>
+                <boxGeometry args={[40, 1, 15]} />
+                <meshStandardMaterial color="#1e293b" metalness={1} roughness={0} />
+            </mesh>
 
-            {/* Ceiling Truss */}
-            <group position={[0, 12, 0]}>
-                {[...Array(5)].map((_, i) => (
-                    <mesh key={i} position={[0, 0, i * 4 - 10]}>
-                        <boxGeometry args={[30, 0.5, 0.5]} />
-                        <meshStandardMaterial color="#0f172a" metalness={0.8} />
+            {/* Floating Neon Rings (Reference Image 5 Influence) */}
+            <group position={[0, 18, -10]}>
+                {[15, 25, 40].map((radius, i) => (
+                    <mesh key={radius} rotation={[Math.PI / 2, 0, 0]} position={[0, -i * 2, 0]}>
+                        <torusGeometry args={[radius, 0.08, 16, 128]} />
+                        <meshBasicMaterial color="#00f3ff" transparent opacity={0.4 - i * 0.1} />
                     </mesh>
                 ))}
             </group>
+
+            {/* Monetization Terminals (Vertical Ad Banners) */}
+            {[-22, 22].map((x) => (
+                <group key={x} position={[x, 10, -8]} rotation={[0, x > 0 ? 0.6 : -0.6, 0]}>
+                    <mesh>
+                        <boxGeometry args={[6.2, 15.2, 0.6]} />
+                        <meshStandardMaterial color="#020617" metalness={1} roughness={0} />
+                    </mesh>
+
+                    {/* The Ad Content */}
+                    <Image
+                        url={x < 0 ? "/auditorium-ad-left.png" : "/auditorium-ad-right.png"}
+                        scale={[6, 15]}
+                        position={[0, 0, 0.35]}
+                        transparent
+                    />
+
+                    {/* Glowing Accent */}
+                    <mesh position={[0, 0, 0.31]}>
+                        <planeGeometry args={[6.1, 15.1]} />
+                        <meshBasicMaterial color="#06b6d4" transparent opacity={0.15} />
+                    </mesh>
+
+                    <Text
+                        position={[0, -8.2, 0.5]}
+                        fontSize={0.4}
+                        color="#06b6d4"
+                        fontWeight="black"
+                        font="/fonts/Inter-Black.ttf"
+                    >
+                        MONETIZATION TERMINAL
+                    </Text>
+                </group>
+            ))}
         </group>
     )
 }
 
-export default function MainStageExperience({ streamUrl, isLive }: { streamUrl: string, isLive: boolean }) {
+import PresentationScreen from './PresentationScreen'
+
+export default function MainStageExperience({
+    streamUrl,
+    isLive,
+    slidesUrl = '',
+    currentSlide = 1,
+    totalSlides = 1
+}: {
+    streamUrl: string,
+    isLive: boolean,
+    slidesUrl?: string,
+    currentSlide?: number,
+    totalSlides?: number
+}) {
     return (
-        <div className="w-full h-full bg-white relative">
+        <div className="w-full h-full bg-[#020617]">
             <Canvas
-                camera={{ position: [0, 5, 18], fov: 45 }}
-                gl={{ toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.0 }}
+                camera={{ position: [0, 8, 30], fov: 40 }}
+                gl={{ toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 0.8 }}
                 shadows
             >
-                {/* Controls */}
+                {/* Controls - Restricted for Premium feel */}
                 <OrbitControls
-                    target={[0, 3, -8]}
-                    minPolarAngle={Math.PI / 4}
+                    target={[0, 5, -5]}
+                    minPolarAngle={Math.PI / 6}
                     maxPolarAngle={Math.PI / 2}
                     enablePan={false}
-                    minDistance={10}
-                    maxDistance={25}
+                    minDistance={15}
+                    maxDistance={45}
                 />
 
-                {/* Lighting: Studio Style */}
-                <ambientLight intensity={0.5} />
-                <directionalLight position={[-10, 10, 5]} intensity={1} color="#fff" castShadow />
-                {/* Stage Spots */}
-                <SpotLight position={[-8, 15, 5]} target-position={[0, 2, -8]} color="#fff" intensity={5} angle={0.3} penumbra={0.4} castShadow />
-                <SpotLight position={[8, 15, 5]} target-position={[0, 2, -8]} color="#fff" intensity={5} angle={0.3} penumbra={0.4} castShadow />
+                {/* Lighting: High Contrast / Noir Style */}
+                <ambientLight intensity={0.2} />
+                <pointLight position={[0, 20, 0]} intensity={2.5} color="#3b82f6" distance={50} />
+                <SpotLight position={[0, 25, -5]} target-position={[0, 2, -12]} intensity={10} color="#fff" angle={0.4} />
 
-                {/* Backlights for color */}
-                <pointLight position={[-10, 2, -12]} color="#3b82f6" intensity={2} distance={10} />
-                <pointLight position={[10, 2, -12]} color="#ec4899" intensity={2} distance={10} />
-
-                {/* Environment */}
-                <color attach="background" args={['#0f172a']} />
-                <fog attach="fog" args={['#0f172a', 15, 40]} />
+                {/* Atmosphere */}
+                <color attach="background" args={['#010409']} />
+                <fog attach="fog" args={['#010409', 20, 80]} />
 
                 {/* Geometry */}
-                <StageArchitecture />
-                <MainScreen streamUrl={streamUrl} isLive={isLive} />
-                <InstancedAudience />
+                <AuditoriumArchitecture />
+                <CurvedScreen streamUrl={streamUrl} isLive={isLive} />
+                <PresentationScreen
+                    slidesUrl={slidesUrl}
+                    currentSlide={currentSlide}
+                    totalSlides={totalSlides}
+                    position={[18, 10, -10]}
+                    rotation={[0, -0.6, 0]}
+                    scale={[10, 5.6, 1]}
+                />
+                <SeatingArea />
 
-                {/* Floor Reflections (Carpet Area) */}
-                <mesh position={[0, -0.1, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-                    <planeGeometry args={[100, 100]} />
-                    <meshStandardMaterial color="#0f172a" roughness={0.9} />
-                </mesh>
-
-                {/* Post Processing */}
+                {/* Post Processing for that Glow */}
                 <EffectComposer>
-                    <Bloom luminanceThreshold={1} mipmapBlur intensity={0.5} />
+                    <Bloom luminanceThreshold={0.5} mipmapBlur intensity={1.5} radius={0.6} />
+                    <Vignette darkness={0.7} />
                     <ToneMapping />
-                    <Noise opacity={0.02} />
                 </EffectComposer>
             </Canvas>
         </div>

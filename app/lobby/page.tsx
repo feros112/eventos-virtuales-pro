@@ -21,6 +21,12 @@ export default async function LobbyPage() {
         .select('*')
         .order('id', { ascending: true })
 
+    // Fetch Sponsors for Lobby Banners
+    const { data: sponsors } = await supabase
+        .from('sponsors')
+        .select('*')
+        .order('created_at', { ascending: false })
+
     async function signOut() {
         'use server'
         const supabase = await createClient()
@@ -34,6 +40,7 @@ export default async function LobbyPage() {
             profile={profile}
             signOutAction={signOut}
             rooms={rooms || []}
+            sponsors={sponsors || []}
         />
     )
 }

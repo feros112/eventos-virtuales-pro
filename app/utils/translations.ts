@@ -9,7 +9,7 @@ export const translations = {
         auth: {
             signInTitle: "ACCESO",
             welcomeTitle: "BIENVENIDO",
-            welcomeSubtitle: "A VIRTUAL",
+            welcomeSubtitle: "A EVENTOS VIRTUALES PRO",
             welcomeBody: "Únete a la experiencia inmersiva definitiva. Crea tu cuenta para acceder a eventos exclusivos.",
             emailLabel: "CORREO ELECTRÓNICO",
             passwordLabel: "CONTRASEÑA",
@@ -29,12 +29,22 @@ export const translations = {
             footer: {
                 legal: "Aviso Legal",
                 sitemap: "Mapa del Sitio",
-                proEvents: "Eventos Pro"
+                proEvents: "Eventos Virtuales PRO"
             }
         },
         lobby: {
+            loading: "Cargando Entorno 3D...",
+            availableDestinations: "Destinos Disponibles",
             enter: "ENTRAR",
             back: "VOLVER",
+            hud: {
+                agenda: "Agenda",
+                profile: "Perfil",
+                logout: "Salir",
+                quickNav: "Navegación",
+                floorPlan: "Mapa",
+                chat: "Chat"
+            },
             instructions: {
                 title: "CONTROLES DE NAVEGACIÓN",
                 desktop: "ESCRITORIO",
@@ -45,7 +55,15 @@ export const translations = {
                 drag: "Arrastrar",
                 pinch: "Zoom",
                 tap: "Tocar",
-                gotIt: "¡ENTENDIDO!"
+                gotIt: "¡ENTENDIDO!",
+                lookTouch: "Toca y arrastra para mirar alrededor",
+                moveTouch: "Toca en los cuadros para moverte",
+                zoomTouch: "Toca y pellizca para hacer zoom",
+                lookClick: "Haz clic y arrastra para mirar",
+                moveClick: "Haz clic en los cuadros para moverte",
+                zoomScroll: "Usa la rueda del ratón para hacer zoom",
+                mobileTitle: "Navegación Móvil",
+                mouseTitle: "Ratón y Teclado"
             },
             rooms: {
                 auditorium: "AUDITORIO",
@@ -66,6 +84,10 @@ export const translations = {
             handRaised: "TU MANO LEVANTADA",
             stageOnly: "Solo Escenario",
             toggleChat: "Chat",
+            chatTitle: "Chat en Vivo",
+            chatWelcome: "👋 Bienvenidos al chat oficial. Recuerden mantener el respeto.",
+            chatPlaceholder: "Escribe un mensaje...",
+            chatConnected: "Chat conectado",
             reactions: "Reacciones",
             poll: {
                 title: "Encuesta Activa",
@@ -76,7 +98,18 @@ export const translations = {
                 question: "Pregunta",
                 options: "Opciones",
                 publish: "Publicar"
-            }
+            },
+            slides: "Presentación",
+            nextSlide: "Siguiente",
+            prevSlide: "Anterior"
+        },
+        networking: {
+            title: "Networking Social",
+            subtitle: "Encuentra socios, clientes o amigos con tus mismos intereses.",
+            searchPlaceholder: "Buscar por nombre, cargo o intereses...",
+            chatBtn: "Chat",
+            backToLobby: "Volver al Lobby",
+            filters: "Filtros"
         },
         admin: {
             dashboard: "Tablero",
@@ -88,28 +121,52 @@ export const translations = {
             analytics: "Analíticas",
             logout: "Cerrar Sesión",
             title: "Panel de Administración",
-            welcome: "Bienvenido al Panel de Control",
-            quickStats: "Estadísticas Rápidas"
+            welcome: "Bienvenido al Centro de Comando",
+            quickStats: "Estadísticas Rápidas",
+            online: "En Línea",
+            superAdmin: "Super Administrador",
+            activeRegistry: "Registro Activo",
+            commandActions: "Acciones de Comando",
+            systemStatus: "Estado del Sistema",
+            onlineSystem: "Sistema en Línea",
+            latency: "Latencia",
+            interactions: "Interacciones",
+            sysLoad: "Carga Sist."
         },
         videoAdmin: {
-            title: "Gestión de Video",
-            currentStream: "Stream Actual",
-            streamUrl: "URL del Stream (HLS/M3U8)",
+            title: "Control de Transmisión",
+            currentStream: "Señal de Video Actual",
+            streamUrl: "Origen de la Señal (Embed URL)",
             streamTitle: "Título del Evento",
-            isLive: "En Vivo",
-            updateBtn: "Actualizar Stream",
-            successUpdate: "Configuración actualizada correctamente"
+            isLive: "Estado Maestro",
+            updateBtn: "Desplegar Cambios",
+            successUpdate: "Configuración actualizada correctamente",
+            broadcastUnit: "Broadcast_Command_Unit",
+            mainStageSignal: "Señal del Auditorio Principal",
+            signalLive: "SEÑAL EN VIVO",
+            systemOffline: "SISTEMA OFFLINE",
+            quickGuide: "Guía Rápida",
+            networkSignal: "Señal de Red",
+            guideBody: "Los cambios realizados aquí se reflejarán instantáneamente para todos los asistentes. Asegúrese de probar la URL del stream antes de activar el Estado Maestro.",
+            slidesControl: "Control de Diapositivas",
+            slidesUrl: "URL del Carrusel (JSON/Carpeta)",
+            currentSlide: "Diapositiva Actual",
+            totalSlides: "Total de Diapositivas"
         },
         moderation: {
-            title: "Moderación en Vivo",
-            handRaiseQueue: "Cola de Manos Levantadas",
-            chatMonitor: "Monitor de Chat",
+            title: "Terminal de Supervisión",
+            handRaiseQueue: "Fila de Interacción",
+            chatMonitor: "Monitor de Seguridad",
             clearQueue: "Limpiar Cola",
-            noHands: "No hay manos levantadas",
+            noHands: "Cola de interacción vacía",
             user: "Usuario",
             time: "Hora",
             action: "Acción",
-            dismiss: "Descartar"
+            dismiss: "Descartar",
+            liveFeed: "Transmisión_En_Vivo_Segura",
+            queueStatus: "Estado de la Fila",
+            attendee: "Asistente",
+            waitingSince: "Esperando desde las"
         },
         common: {
             save: "Guardar",
@@ -125,7 +182,7 @@ export const translations = {
         auth: {
             signInTitle: "SIGN IN",
             welcomeTitle: "WELCOME",
-            welcomeSubtitle: "TO VIRTUAL",
+            welcomeSubtitle: "TO EVENTOS VIRTUALES PRO",
             welcomeBody: "Join the ultimate immersive experience. Create your account to access exclusive events.",
             emailLabel: "EMAIL ADDRESS",
             passwordLabel: "PASSWORD",
@@ -145,12 +202,22 @@ export const translations = {
             footer: {
                 legal: "Legal Notice",
                 sitemap: "Site Map",
-                proEvents: "Pro Events"
+                proEvents: "Eventos Virtuales PRO"
             }
         },
         lobby: {
+            loading: "Loading 3D Environment...",
+            availableDestinations: "Available Destinations",
             enter: "ENTER",
             back: "BACK",
+            hud: {
+                agenda: "Agenda",
+                profile: "Profile",
+                logout: "Logout",
+                quickNav: "Quick Nav",
+                floorPlan: "Floor Plan",
+                chat: "Chat"
+            },
             instructions: {
                 title: "NAVIGATION CONTROLS",
                 desktop: "DESKTOP",
@@ -161,7 +228,15 @@ export const translations = {
                 drag: "Drag",
                 pinch: "Zoom",
                 tap: "Tap",
-                gotIt: "GOT IT!"
+                gotIt: "GOT IT!",
+                lookTouch: "Touch and drag to look around the space",
+                moveTouch: "Touch on the squares throughout the space to move",
+                zoomTouch: "Touch and pinch to zoom in and out",
+                lookClick: "Click and drag to look around the space",
+                moveClick: "Click on the squares throughout the space to move",
+                zoomScroll: "Use the scroll wheel to zoom in and out",
+                mobileTitle: "Mobile Navigation",
+                mouseTitle: "Mouse and Keyboard"
             },
             rooms: {
                 available: "AVAILABLE ROOMS",
@@ -183,6 +258,10 @@ export const translations = {
             handRaised: "HAND RAISED",
             stageOnly: "Stage Only",
             toggleChat: "Toggle Chat",
+            chatTitle: "Live Chat",
+            chatWelcome: "👋 Welcome to the official chat. Please be respectful.",
+            chatPlaceholder: "Type a message...",
+            chatConnected: "Chat connected",
             reactions: "Reactions",
             poll: {
                 title: "Active Poll",
@@ -193,7 +272,18 @@ export const translations = {
                 question: "Question",
                 options: "Options",
                 publish: "Publish"
-            }
+            },
+            slides: "Presentation",
+            nextSlide: "Next",
+            prevSlide: "Previous"
+        },
+        networking: {
+            title: "Social Networking",
+            subtitle: "Find partners, clients or friends with your same interests.",
+            searchPlaceholder: "Search by name or role...",
+            chatBtn: "Chat",
+            backToLobby: "Back to Lobby",
+            filters: "Filters"
         },
         admin: {
             dashboard: "Dashboard",
@@ -205,28 +295,52 @@ export const translations = {
             analytics: "Analytics",
             logout: "Logout",
             title: "Admin Panel",
-            welcome: "Welcome to Control Panel",
-            quickStats: "Quick Stats"
+            welcome: "Welcome to Command Center",
+            quickStats: "Quick Stats",
+            online: "Online",
+            superAdmin: "Super Admin",
+            activeRegistry: "Active Registry",
+            commandActions: "Command Actions",
+            systemStatus: "System Status",
+            onlineSystem: "System Online",
+            latency: "Latency",
+            interactions: "Interactions",
+            sysLoad: "Sys Load"
         },
         videoAdmin: {
-            title: "Video Management",
-            currentStream: "Current Stream",
-            streamUrl: "Stream URL (HLS/M3U8)",
+            title: "Broadcast Control",
+            currentStream: "Current Video Signal",
+            streamUrl: "Signal Source (Embed URL)",
             streamTitle: "Event Title",
-            isLive: "Is Live",
-            updateBtn: "Update Stream",
-            successUpdate: "Configuration updated successfully"
+            isLive: "Master Status",
+            updateBtn: "Deploy Changes",
+            successUpdate: "Configuration updated successfully",
+            broadcastUnit: "Broadcast_Command_Unit",
+            mainStageSignal: "Main Stage Signal",
+            signalLive: "SIGNAL LIVE",
+            systemOffline: "SYSTEM OFFLINE",
+            quickGuide: "Quick Guide",
+            networkSignal: "Network Signal",
+            guideBody: "Changes made here will be instantly reflected for all attendees. Make sure to test the stream URL before activating the Master Status.",
+            slidesControl: "Slides Control",
+            slidesUrl: "Carousel URL (JSON/Folder)",
+            currentSlide: "Current Slide",
+            totalSlides: "Total Slides"
         },
         moderation: {
-            title: "Live Moderation",
-            handRaiseQueue: "Hand Raise Queue",
-            chatMonitor: "Chat Monitor",
+            title: "Overwatch Terminal",
+            handRaiseQueue: "Interaction Queue",
+            chatMonitor: "Security Monitor",
             clearQueue: "Clear Queue",
-            noHands: "No hands raised",
+            noHands: "Interaction queue empty",
             user: "User",
             time: "Time",
             action: "Action",
-            dismiss: "Dismiss"
+            dismiss: "Dismiss",
+            liveFeed: "Secure_Live_Feed",
+            queueStatus: "Queue Status",
+            attendee: "Attendee",
+            waitingSince: "Waiting since"
         },
         common: {
             save: "Save",

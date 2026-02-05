@@ -1,245 +1,132 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { login, signup } from './actions'
-import { ArrowLeft, Zap } from 'lucide-react'
-import Link from 'next/link'
-import { clsx } from 'clsx'
+import { login } from './actions'
+import { ArrowRight, Zap, ShieldCheck } from 'lucide-react'
 import { useLanguage } from '../context/LanguageContext'
-
-function ClientDate() {
-    const [date, setDate] = useState('')
-    const { language } = useLanguage()
-
-    useEffect(() => {
-        setDate(new Date().toLocaleDateString(language === 'es' ? 'es-ES' : 'en-US', { month: '2-digit', day: '2-digit', year: '2-digit' }))
-    }, [language])
-    return <>{date}</>
-}
+import Image from 'next/image'
+import Link from 'next/link'
 
 export default function AuthUi({ message }: { message?: string }) {
-    const [view, setView] = useState<'login' | 'register'>('login')
-    const { t, language } = useLanguage()
-
-    console.log('AuthUi Render', { language, t_exists: !!t })
-
-    if (!t || !t.auth) {
-        return <div className="min-h-screen bg-slate-950 flex items-center justify-center text-white">Loading translations...</div>
-    }
+    const { t } = useLanguage()
 
     return (
-        <div className="min-h-screen relative overflow-hidden font-sans">
-            <AnimatePresence mode='wait'>
+        <div style={{ backgroundColor: '#020617', color: 'white', minHeight: '100vh', display: 'flex', position: 'relative', overflow: 'hidden', fontFamily: 'sans-serif' }}>
 
-                {/* ========================================================================
-                    VIEW: LOGIN (BLUE THEME + WHITE CARD)
-                   ======================================================================== */}
-                {view === 'login' && (
-                    <motion.div
-                        key="login"
-                        initial={{ opacity: 0, x: -50 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -50 }}
-                        transition={{ duration: 0.5 }}
-                        className="w-full h-screen bg-blue-900 relative flex items-center justify-center p-4"
-                    >
-                        {/* Background Elements */}
-                        <div className="absolute inset-0 z-0">
-                            {/* Blue Gradient Background - Simulating the 'confetti' image with CSS or simple image */}
-                            {/* Blue Gradient Background - Simulating party atmosphere */}
-                            <div className="w-full h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-600 via-blue-900 to-slate-900 opacity-50 block" />
-                            <div className="absolute inset-0 bg-blue-900/80 mix-blend-multiply" />
-                            <div className="absolute top-0 right-0 p-10 lg:p-20 text-blue-200/20 font-black text-6xl md:text-8xl lg:text-9xl tracking-tighter select-none z-0">
-                                <ClientDate />
+            {/* Background - Fixed */}
+            <div style={{ position: 'fixed', inset: 0, zIndex: 0 }}>
+                <Image
+                    src="/luxury-hall.png"
+                    alt="Background"
+                    fill
+                    style={{ objectFit: 'cover', opacity: 0.25 }}
+                    priority
+                />
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(90deg, #020617 0%, transparent 50%, #020617 100%)' }} />
+            </div>
+
+            {/* Left Section (Visual) - Redesigned for better symmetry and form */}
+            <div style={{ position: 'relative', flex: 3, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '10% 8%', zIndex: 10 }} className="hidden lg:flex">
+                <div style={{ maxWidth: '700px' }}>
+
+                    {/* Top Label */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', marginBottom: '4rem' }}>
+                        <div style={{ width: '5rem', height: '2px', backgroundColor: '#06b6d4' }} />
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                            <ShieldCheck size={18} style={{ color: '#06b6d4' }} />
+                            <span style={{ fontSize: '0.8rem', fontWeight: 900, color: '#22d3ee', textTransform: 'uppercase', letterSpacing: '0.5em' }}>
+                                SEGURIDAD_DE_ACCESO
+                            </span>
+                        </div>
+                    </div>
+
+                    {/* Main Title - Better spacing and alignment */}
+                    <h2 style={{ fontSize: '10rem', fontWeight: 1000, lineHeight: 0.8, letterSpacing: '-0.07em', textTransform: 'uppercase', margin: 0 }}>
+                        ACCESO <br />
+                        <span style={{ color: '#22d3ee', textShadow: '0 0 40px rgba(6,182,212,0.3)' }}>PRO.</span>
+                    </h2>
+
+                    {/* Decorative description to give "form" */}
+                    <div style={{ marginTop: '4rem', padding: '2.5rem', borderLeft: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.02)', backdropFilter: 'blur(10px)', borderRadius: '0 2rem 2rem 0' }}>
+                        <p style={{ fontSize: '1.2rem', color: 'rgba(255,255,255,0.5)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.3em', lineHeight: 1.6, margin: 0 }}>
+                            Bienvenido a la terminal de control. <br />
+                            Tu experiencia 3D comienza aquí.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            {/* Right Section (Form) */}
+            <div style={{ position: 'relative', flex: 2, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '3rem', zIndex: 20, backgroundColor: 'rgba(2, 6, 23, 0.85)', backdropFilter: 'blur(50px)', borderLeft: '1px solid rgba(255,255,255,0.1)' }}>
+                <div style={{ width: '100%', maxWidth: '460px' }}>
+
+                    {/* Header */}
+                    <div style={{ marginBottom: '5rem', textAlign: 'center' }}>
+                        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '1.2rem', marginBottom: '2rem' }}>
+                            <div style={{ width: '0.6rem', height: '3rem', backgroundColor: '#06b6d4', borderRadius: '1rem', boxShadow: '0 0 20px #06b6d4' }} />
+                            <h1 style={{ fontSize: '3rem', fontWeight: 1000, textTransform: 'uppercase', margin: 0, letterSpacing: '-0.03em' }}>ENTRAR</h1>
+                        </div>
+                        <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.75rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.5em' }}>TERMINAL DE IDENTIFICACIÓN</p>
+                    </div>
+
+                    {/* Alert */}
+                    {message && (
+                        <div style={{ marginBottom: '3.5rem', padding: '2rem', backgroundColor: 'rgba(244,63,94,0.1)', border: '2px solid rgba(244,63,94,0.3)', borderRadius: '2.5rem', display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+                            <Zap style={{ color: '#f43f5e' }} />
+                            <div>
+                                <span style={{ fontSize: '0.65rem', fontWeight: 900, color: '#f43f5e', textTransform: 'uppercase', display: 'block', marginBottom: '0.25rem' }}>FALLO DE ACCESO</span>
+                                <span style={{ fontSize: '1rem', fontWeight: 700 }}>{message}</span>
+                            </div>
+                        </div>
+                    )}
+
+                    <form style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                <label style={{ fontSize: '0.75rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.4em', color: 'rgba(255,255,255,0.5)' }}>CORREO ELECTRÓNICO</label>
+                                <input
+                                    name="email"
+                                    type="email"
+                                    required
+                                    style={{ background: 'rgba(255,255,255,0.05)', border: '2px solid rgba(255,255,255,0.15)', padding: '1.6rem', borderRadius: '1.8rem', color: 'white', fontSize: '1.2rem', fontWeight: 800, outline: 'none', width: '100%', boxSizing: 'border-box' }}
+                                    placeholder="USUARIO@EMPRESA.COM"
+                                />
+                            </div>
+
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                <label style={{ fontSize: '0.75rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.4em', color: 'rgba(255,255,255,0.5)' }}>CLAVE SECRETA</label>
+                                <input
+                                    name="password"
+                                    type="password"
+                                    required
+                                    style={{ background: 'rgba(255,255,255,0.05)', border: '2px solid rgba(255,255,255,0.15)', padding: '1.6rem', borderRadius: '1.8rem', color: 'white', fontSize: '1.2rem', fontWeight: 800, outline: 'none', width: '100%', boxSizing: 'border-box' }}
+                                    placeholder="••••••••"
+                                />
                             </div>
                         </div>
 
-                        {/* Huge WATERMARK TEXT (Background Layer) */}
-                        <div className="absolute left-0 bottom-1/2 translate-y-1/2 md:translate-y-0 md:top-1/2 -translate-x-[10%] text-[10vw] font-black leading-none tracking-tighter text-white/5 select-none z-0 pointer-events-none whitespace-nowrap">
-                            eVENTOS VIRTUALES PRO
-                        </div>
+                        <button
+                            formAction={login}
+                            style={{ padding: '2rem', backgroundColor: '#06b6d4', color: 'black', fontWeight: 1000, fontSize: '1.2rem', textTransform: 'uppercase', letterSpacing: '0.6em', borderRadius: '2.5rem', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1.2rem', boxShadow: '0 20px 50px rgba(6,182,212,0.4)', transition: 'all 0.3s' }}
+                        >
+                            INGRESAR <ArrowRight />
+                        </button>
 
-                        {/* Floating White Card */}
-                        <div className="relative z-20 w-full max-w-5xl bg-white rounded-[40px] shadow-2xl overflow-hidden flex flex-col md:flex-row min-h-[500px]">
+                        <Link
+                            href="/"
+                            style={{ textAlign: 'center', color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', fontWeight: 900, textTransform: 'uppercase', textDecoration: 'none', letterSpacing: '0.2em', marginTop: '1.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '2.5rem' }}
+                        >
+                            ¿No tienes cuenta? <span style={{ color: 'white', textDecoration: 'underline', textUnderlineOffset: '8px' }}>Regístrate gratis</span>
+                        </Link>
+                    </form>
+                </div>
+            </div>
 
-                            {/* Left Side: Title */}
-                            <div className="md:w-1/2 p-10 md:p-16 flex flex-col justify-center bg-white relative">
-                                <h2 className="text-4xl md:text-5xl font-bold text-slate-300 tracking-tighter mb-4">{t.auth.signInTitle}</h2>
-                                <div className="text-5xl md:text-6xl font-black text-slate-900 tracking-tighter leading-none">
-                                    EVENTOS<br />
-                                    VIRTUALES<br />
-                                    <span className="text-blue-600">PRO</span>
-                                </div>
-                            </div>
-
-                            {/* Right Side: Form */}
-                            <div className="md:w-1/2 p-10 md:p-16 flex flex-col justify-center bg-slate-50">
-                                <form className="flex flex-col gap-6">
-
-                                    <div className="grid grid-cols-1 gap-6">
-                                        <div className="space-y-2">
-                                            <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">{t.auth.emailLabel}</label>
-                                            <input
-                                                name="email"
-                                                type="email"
-                                                required
-                                                className="w-full border-b-2 border-slate-200 bg-transparent py-2 text-slate-900 font-bold outline-none focus:border-blue-600 transition-colors"
-                                            />
-                                        </div>
-                                        <div className="space-y-2">
-                                            <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">{t.auth.passwordLabel}</label>
-                                            <input
-                                                name="password"
-                                                type="password"
-                                                required
-                                                className="w-full border-b-2 border-slate-200 bg-transparent py-2 text-slate-900 font-bold outline-none focus:border-blue-600 transition-colors"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    {message && (
-                                        <div className="text-red-500 text-xs font-bold bg-red-50 p-2 rounded">
-                                            {message}
-                                        </div>
-                                    )}
-
-                                    <div className="pt-6 flex flex-col sm:flex-row gap-4">
-                                        <button
-                                            type="button"
-                                            onClick={() => setView('register')}
-                                            className="flex-1 py-3 px-6 rounded-full border-2 border-blue-600 text-blue-600 font-bold text-xs md:text-sm uppercase tracking-widest hover:bg-blue-50 transition-all text-center"
-                                        >
-                                            {t.auth.createAccountBtn}
-                                        </button>
-                                        <button
-                                            formAction={login}
-                                            className="flex-1 py-3 px-6 rounded-full bg-blue-600 text-white font-bold text-xs md:text-sm uppercase tracking-widest hover:bg-blue-700 shadow-xl shadow-blue-500/30 transition-all"
-                                        >
-                                            {t.auth.signInBtn}
-                                        </button>
-                                    </div>
-
-                                    <div className="text-center pt-4">
-                                        <a href="#" className="text-xs text-slate-400 hover:text-blue-600 transition-colors font-medium">{t.auth.forgotPassword}</a>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-
-                        {/* Footer Links (Absolute Bottom) */}
-                        <div className="absolute bottom-6 left-0 w-full flex justify-center md:justify-start md:pl-10 text-[10px] md:text-xs font-bold text-white/50 uppercase tracking-widest gap-4 md:gap-8 z-20">
-                            <Link href="#" className="hover:text-white transition-colors">{t.auth.footer.legal}</Link>
-                            <Link href="#" className="hover:text-white transition-colors">{t.auth.footer.sitemap}</Link>
-                            <Link href="#" className="hover:text-white transition-colors">{t.auth.footer.proEvents}</Link>
-                        </div>
-                    </motion.div>
-                )}
-
-
-                {/* ========================================================================
-                    VIEW: REGISTER (PURPLE THEME + SPLIT SCREEN)
-                   ======================================================================== */}
-                {view === 'register' && (
-                    <motion.div
-                        key="register"
-                        initial={{ opacity: 0, x: 50 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: 50 }}
-                        transition={{ duration: 0.5 }}
-                        className="w-full min-h-screen bg-slate-950 flex flex-col lg:flex-row"
-                    >
-                        {/* --- LEFT COLUMN: BRANDING & HERO --- */}
-                        <div className="lg:w-[65%] relative bg-indigo-900 overflow-hidden flex flex-col justify-between p-8 md:p-12 lg:p-20 text-white min-h-[400px] lg:min-h-screen">
-                            {/* Background Image */}
-                            <div className="absolute inset-0 z-0">
-                                {/* Abstract Background */}
-                                <div className="w-full h-full bg-[conic-gradient(at_top_right,_var(--tw-gradient-stops))] from-indigo-900 via-purple-900 to-cyan-900 opacity-60 mix-blend-overlay" />
-                                <div className="absolute inset-0 bg-gradient-to-tr from-indigo-900/90 via-purple-900/40 to-cyan-500/30" />
-                            </div>
-
-                            {/* Top Branding (Back Button) */}
-                            <div className="relative z-10">
-                                <button
-                                    onClick={() => setView('login')}
-                                    className="flex items-center gap-2 text-white/70 hover:text-white transition-colors group"
-                                >
-                                    <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-                                    <span className="font-bold tracking-widest text-sm">{t.auth.backToLogin}</span>
-                                </button>
-                            </div>
-
-                            {/* Center Message */}
-                            <div className="relative z-10 my-auto max-w-2xl mt-20 lg:mt-auto">
-                                <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.9] mb-8">
-                                    {t.auth.welcomeTitle}<br />
-                                    {t.auth.welcomeSubtitle}
-                                </h1>
-                                <p className="text-lg md:text-xl text-indigo-100 font-light max-w-lg leading-relaxed border-l-4 border-cyan-400 pl-6">
-                                    {t.auth.welcomeBody}
-                                </p>
-                            </div>
-
-                            {/* Logo Watermark */}
-                            <div className="absolute bottom-[-5%] right-[-5%] text-9xl font-black text-white/5 tracking-tighter select-none pointer-events-none">
-                                {t.auth.registrationTitle}
-                            </div>
-                        </div>
-
-                        {/* --- RIGHT COLUMN: REGISTRATION FORM --- */}
-                        <div className="lg:w-[35%] bg-[#2e1065] text-white flex flex-col relative z-20 -mt-10 lg:mt-0 rounded-t-[40px] lg:rounded-none lg:rounded-tl-[60px] shadow-[-20px_0_60px_rgba(0,0,0,0.5)] overflow-y-auto">
-                            <div className="p-8 md:p-12 flex-1 relative">
-                                <div className="mb-8">
-                                    <h2 className="text-3xl font-bold mb-1">{t.auth.registrationTitle}</h2>
-                                    <div className="h-1 w-20 bg-cyan-400 rounded-full" />
-                                </div>
-
-                                <form className="space-y-6">
-                                    {/* Account Info */}
-                                    <div className="space-y-4">
-                                        <h3 className="text-xs font-bold text-indigo-300 uppercase tracking-wider border-b border-indigo-500/30 pb-2">{t.auth.accountCreds}</h3>
-                                        <div className="grid grid-cols-1 gap-3">
-                                            <input name="email" type="email" placeholder={`${t.auth.emailLabel}*`} required className="w-full bg-white text-slate-900 placeholder:text-slate-400 px-4 py-3 rounded text-sm font-bold outline-none focus:ring-2 focus:ring-cyan-400" />
-                                            <div className="grid grid-cols-2 gap-3">
-                                                <input name="password" type="password" placeholder={`${t.auth.passwordLabel}*`} required className="w-full bg-white text-slate-900 placeholder:text-slate-400 px-4 py-3 rounded text-sm font-bold outline-none focus:ring-2 focus:ring-cyan-400" />
-                                                <input type="password" placeholder={t.auth.confirmPassword} className="w-full bg-white text-slate-900 placeholder:text-slate-400 px-4 py-3 rounded text-sm font-bold outline-none focus:ring-2 focus:ring-cyan-400" />
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* Personal Info */}
-                                    <div className="space-y-4">
-                                        <h3 className="text-xs font-bold text-indigo-300 uppercase tracking-wider border-b border-indigo-500/30 pb-2">{t.auth.profileDetails}</h3>
-                                        <div className="grid grid-cols-2 gap-3">
-                                            <input type="text" placeholder={t.auth.namePlaceholder} className="w-full bg-white/90 text-slate-900 placeholder:text-slate-400 px-4 py-3 rounded text-sm outline-none focus:ring-2 focus:ring-cyan-400" />
-                                            <input type="text" placeholder={t.auth.lastNamePlaceholder} className="w-full bg-white/90 text-slate-900 placeholder:text-slate-400 px-4 py-3 rounded text-sm outline-none focus:ring-2 focus:ring-cyan-400" />
-                                        </div>
-                                        <input type="text" placeholder={t.auth.companyPlaceholder} className="w-full bg-white/90 text-slate-900 placeholder:text-slate-400 px-4 py-3 rounded text-sm outline-none focus:ring-2 focus:ring-cyan-400" />
-                                    </div>
-
-                                    {message && (
-                                        <div className="p-3 bg-red-500/20 border border-red-500 text-red-200 text-xs font-bold rounded">
-                                            {message}
-                                        </div>
-                                    )}
-
-                                    <div className="pt-4">
-                                        <button
-                                            formAction={signup}
-                                            className="w-full py-4 bg-cyan-400 hover:bg-cyan-300 text-slate-900 font-black text-sm uppercase tracking-widest rounded shadow-[0_0_30px_rgba(34,211,238,0.4)] transition-all hover:scale-[1.02]"
-                                        >
-                                            {t.auth.completeRegBtn}
-                                        </button>
-                                        <p className="text-center text-xs text-indigo-300 mt-4">
-                                            {t.auth.alreadyAccount} <button type="button" onClick={() => setView('login')} className="text-white hover:text-cyan-400 underline font-bold">{t.auth.signInBtn}</button>
-                                        </p>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+            <style jsx>{`
+                .hidden { display: none; }
+                input:focus { border-color: #06b6d4 !important; background: rgba(6,182,212,0.05) !important; }
+                button:hover { background-color: white !important; transform: translateY(-3px); box-shadow: 0 30px 60px rgba(255,255,255,0.2) !important; }
+                @media (min-width: 1024px) { .lg\\:flex { display: flex; } }
+            `}</style>
         </div>
     )
 }

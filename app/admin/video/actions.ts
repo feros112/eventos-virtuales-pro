@@ -28,8 +28,11 @@ export async function updateStreamConfig(formData: FormData) {
     const streamUrl = formData.get('stream_url') as string
     const streamTitle = formData.get('stream_title') as string
     const isLive = formData.get('is_live') === 'on'
-    // Checkbox: "on" if checked, null if unchecked. 
-    // Note: ensure the form sends something or handle null correctly.
+
+    // Slide Data
+    const slidesUrl = formData.get('slides_url') as string
+    const currentSlide = parseInt(formData.get('current_slide') as string) || 1
+    const totalSlides = parseInt(formData.get('total_slides') as string) || 1
 
     // 4. Update DB
     const { error } = await supabase
@@ -37,7 +40,10 @@ export async function updateStreamConfig(formData: FormData) {
         .update({
             stream_url: streamUrl,
             stream_title: streamTitle,
-            is_live: isLive
+            is_live: isLive,
+            slides_url: slidesUrl,
+            current_slide: currentSlide,
+            total_slides: totalSlides
         })
         .eq('slug', 'main-theater')
 

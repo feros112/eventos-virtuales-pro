@@ -1,236 +1,257 @@
 'use client'
 
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Text, Grid, Environment, useTexture, OrbitControls, useCursor } from '@react-three/drei'
+import { Text, Environment, useTexture, CameraControls, Html, Billboard, Float, MeshReflectorMaterial, Image } from '@react-three/drei'
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing'
 import { useRouter } from 'next/navigation'
-import { useState, useRef, Suspense } from 'react'
+import { useState, useRef, Suspense, useMemo } from 'react'
 import * as THREE from 'three'
 import { Vector3 } from 'three'
 
-// --- ASSETS & DATA ---
-// Placeholder sponsor data - normally passed via props or context
-const SPONSORS = [
-    { id: 1, name: "TechGiant", tier: "gold", color: "#3b82f6", pos: [0, 0, -10] },
-    { id: 2, name: "CloudSoft", tier: "gold", color: "#6366f1", pos: [-15, 0, -10] },
-    { id: 3, name: "InnovateX", tier: "gold", color: "#8b5cf6", pos: [15, 0, -10] },
-    { id: 4, name: "StartupOne", tier: "silver", color: "#cbd5e1", pos: [-8, 0, 5] },
-    { id: 5, name: "DevCorp", tier: "silver", color: "#94a3b8", pos: [8, 0, 5] },
-    { id: 6, name: "PixelStudio", tier: "bronze", color: "#fca5a5", pos: [-15, 0, 15] },
-    { id: 7, name: "GlobalNet", tier: "bronze", color: "#fdba74", pos: [15, 0, 15] },
-]
+// --- CONSTANTS ---
+const CAMERA_HEIGHT = 1.7
 
 // --- COMPONENTS ---
 
-// 1. Stand Component
-function Stand({ data, onClick }: { data: any, onClick: (sponsor: any) => void }) {
-    const [hovered, setHover] = useState(false)
-    useCursor(hovered)
-
-    // Tier-based Styling
-    const isGold = data.tier === 'gold'
-    const color = isGold ? '#fbbf24' : data.tier === 'silver' ? '#94a3b8' : '#d97706'
-    const scale = isGold ? 1.5 : 1
-
+// 1. Futuristic Floating Welcome Desk (Re-envisioned for BeyondLive)
+function WelcomeDesk() {
     return (
-        <group
-            position={data.pos}
-            rotation={[0, 0, 0]}
-            onPointerOver={() => setHover(true)}
-            onPointerOut={() => setHover(false)}
-            onClick={(e) => { e.stopPropagation(); onClick(data) }}
-            scale={scale}
-        >
-            {/* --- BASE STRUCTURE --- */}
-            {/* Platform */}
-            <mesh position={[0, 0.2, 0]}>
-                <cylinderGeometry args={[3, 3, 0.4, 32]} />
-                <meshStandardMaterial color="#1e293b" />
+        <group position={[0, 0, -3]}>
+            {/* Main Glowing Core - Hexagonal/Cyber Style */}
+            <mesh position={[0, 0.5, 0]}>
+                <cylinderGeometry args={[3.2, 3.4, 1.2, 6]} />
+                <meshStandardMaterial
+                    color="#020617"
+                    emissive="#00f3ff"
+                    emissiveIntensity={0.5}
+                    metalness={1}
+                    roughness={0.1}
+                />
             </mesh>
-            {/* Glow Ring */}
-            {hovered && (
-                <mesh position={[0, 0.2, 0]} rotation={[0, 0, 0]}>
-                    <ringGeometry args={[3.2, 3.4, 32]} />
-                    <meshBasicMaterial color={color} side={THREE.DoubleSide} />
-                </mesh>
-            )}
 
-            {/* --- BACK WALL / SCREEN --- */}
-            <group position={[0, 2.5, -2]}>
-                <mesh>
-                    <boxGeometry args={[5, 4, 0.2]} />
-                    <meshStandardMaterial color="#334155" />
-                </mesh>
-                <mesh position={[0, 0, 0.15]}>
-                    <planeGeometry args={[4.6, 3.6]} />
-                    <meshStandardMaterial color={data.color} emissive={data.color} emissiveIntensity={0.5} toneMapped={false} />
-                </mesh>
-            </group>
+            {/* Pulsing Neon Ring */}
+            <mesh position={[0, 1.15, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+                <ringGeometry args={[3.6, 3.8, 6]} />
+                <meshBasicMaterial color="#00f3ff" transparent opacity={0.8} />
+            </mesh>
 
-            {/* --- DESK --- */}
-            <group position={[0, 1, 1]}>
-                <mesh>
-                    <boxGeometry args={[3, 1.2, 1]} />
-                    <meshStandardMaterial color={isGold ? "#0f172a" : "#334155"} />
-                </mesh>
-                <mesh position={[0, 0.61, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-                    <planeGeometry args={[3, 1]} />
-                    <meshStandardMaterial color={color} metalness={0.8} roughness={0.2} />
-                </mesh>
-            </group>
+            {/* VIRTUAL HOSTESSES (Premium Billboard) */}
+            <Billboard position={[0, 3, -0.5]}>
+                <Image
+                    url="/hostesses.png"
+                    scale={[5, 4]}
+                    transparent
+                    opacity={0.9}
+                />
+                {/* Underlight for Hostess */}
+                <pointLight position={[0, -1, 1]} intensity={0.5} color="#00f3ff" distance={4} />
+            </Billboard>
 
-            {/* --- SIGNAGE --- */}
-            <group position={[0, 5, -2]}>
-                {isGold && (
-                    <mesh position={[0, 0.5, 0]}>
-                        <boxGeometry args={[4, 1, 0.2]} />
-                        <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.5} />
-                    </mesh>
-                )}
+            {/* Branding Shield */}
+            <group position={[0, 4.5, 0]}>
                 <Text
-                    position={[0, 0.5, 0.15]}
-                    fontSize={0.6}
-                    color={isGold ? "black" : "white"}
-                    anchorX="center"
-                    anchorY="middle"
+                    fontSize={0.4}
+                    color="#00f3ff"
+                    fontWeight="black"
+                    anchorY="bottom"
                     font="/fonts/Inter-Bold.ttf"
                 >
-                    {data.name.toUpperCase()}
+                    INFO POINT PRO
                 </Text>
             </group>
-
-            {/* --- DECOR --- */}
-            {/* Side Banners for Gold */}
-            {isGold && (
-                <>
-                    <mesh position={[-2.4, 2.5, -1]} rotation={[0, 0.2, 0]}>
-                        <boxGeometry args={[0.1, 4, 1.5]} />
-                        <meshStandardMaterial color={color} metalness={0.5} />
-                    </mesh>
-                    <mesh position={[2.4, 2.5, -1]} rotation={[0, -0.2, 0]}>
-                        <boxGeometry args={[0.1, 4, 1.5]} />
-                        <meshStandardMaterial color={color} metalness={0.5} />
-                    </mesh>
-                </>
-            )}
-
         </group>
     )
 }
 
-// 2. Camera Controller (Dolly)
-function Rig() {
-    return useFrame((state) => {
-        // Subtle movement? For now, we use OrbitControls for free checking, or fixed.
-        // Let's stick to standard OrbitControls restricted for now to explore.
-    })
+// 2. Navigation Portals (Luxe Redesign)
+function ContentPortals() {
+    const router = useRouter()
+    return (
+        <group>
+            {/* --- EXPO HALL ENTRANCE (Main Target) --- */}
+            <group position={[0, 0, -15]} onClick={() => router.push('/expo/hall')}>
+                {/* Large Archway */}
+                <mesh position={[0, 5, 0]}>
+                    <boxGeometry args={[14, 10, 1]} />
+                    <meshStandardMaterial color="#020617" metalness={1} roughness={0.1} />
+                </mesh>
+                <mesh position={[0, 5, 0.6]}>
+                    <planeGeometry args={[12, 8]} />
+                    <meshStandardMaterial color="#00f3ff" emissive="#00f3ff" emissiveIntensity={0.3} transparent opacity={0.2} />
+                </mesh>
+                <Text position={[0, 11, 1]} fontSize={1.2} color="white" fontWeight="black" font="/fonts/Inter-Bold.ttf">
+                    EXPO PABELLONES
+                </Text>
+                {/* Neon Border */}
+                <mesh position={[0, 5, 0.55]}>
+                    <ringGeometry args={[6.5, 6.7, 4, 1, Math.PI / 4, Math.PI / 2]} />
+                    <meshBasicMaterial color="#00f3ff" />
+                </mesh>
+            </group>
+
+            {/* --- LOUNGE / NETWORKING --- */}
+            <group position={[18, 0, -8]} rotation={[0, -Math.PI / 6, 0]}>
+                <mesh position={[0, 3, 0]}>
+                    <boxGeometry args={[8, 6, 0.5]} />
+                    <meshStandardMaterial color="#0f172a" />
+                </mesh>
+                <Text position={[0, 2.5, 0.3]} fontSize={0.6} color="white" fontWeight="black" font="/fonts/Inter-Bold.ttf">
+                    NETWORKING<br />LOUNGE
+                </Text>
+                <mesh position={[0, 6.5, 0]}>
+                    <torusGeometry args={[3, 0.05, 16, 100]} />
+                    <meshBasicMaterial color="#00f3ff" />
+                </mesh>
+            </group>
+
+            {/* --- SWAG / STORE --- */}
+            <group position={[-18, 0, -8]} rotation={[0, Math.PI / 6, 0]}>
+                <mesh position={[0, 3, 0]}>
+                    <boxGeometry args={[8, 6, 0.5]} />
+                    <meshStandardMaterial color="#0f172a" />
+                </mesh>
+                <Text position={[0, 2.5, 0.3]} fontSize={0.8} color="white" fontWeight="black" font="/fonts/Inter-Bold.ttf">
+                    PRO STORE
+                </Text>
+                <mesh position={[0, 6.5, 0]}>
+                    <torusGeometry args={[3, 0.05, 16, 100]} />
+                    <meshBasicMaterial color="#a855f7" opacity={0.8} transparent />
+                </mesh>
+            </group>
+        </group>
+    )
 }
 
+// 3. Navigation Path (The Electric Path)
+function FloorWaypoint({ position, onClick }: { position: [number, number, number], onClick: (p: Vector3) => void }) {
+    const [hovered, setHover] = useState(false)
+    return (
+        <group position={position}>
+            <mesh
+                rotation={[-Math.PI / 2, 0, 0]}
+                onPointerOver={() => { setHover(true); document.body.style.cursor = 'pointer' }}
+                onPointerOut={() => { setHover(false); document.body.style.cursor = 'auto' }}
+                onClick={() => onClick(new Vector3(position[0], CAMERA_HEIGHT, position[2]))}
+            >
+                <circleGeometry args={[0.6, 32]} />
+                <meshBasicMaterial color={hovered ? "#00f3ff" : "#3b82f6"} transparent opacity={hovered ? 0.9 : 0.4} />
+            </mesh>
+            {/* Glowing Ring */}
+            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 0]}>
+                <ringGeometry args={[0.7, 0.8, 32]} />
+                <meshBasicMaterial color="#00f3ff" transparent opacity={hovered ? 1 : 0.2} />
+            </mesh>
+        </group>
+    )
+}
 
-// --- MAIN SCENE ---
+// --- MAIN EXPERIENCE ---
 export default function ExpoExperience() {
     const router = useRouter()
-    const [selectedSponsor, setSelectedSponsor] = useState<any>(null)
+    const [targetPos, setTargetPos] = useState(new Vector3(0, CAMERA_HEIGHT, 15))
+    const controls = useRef<any>(null)
+
+    useFrame(() => {
+        if (controls.current) {
+            controls.current.setLookAt(
+                targetPos.x, targetPos.y, targetPos.z,
+                targetPos.x, targetPos.y, targetPos.z - 8,
+                true
+            )
+        }
+    })
 
     return (
-        <div className="w-full h-screen bg-slate-950 relative">
-
-            {/* --- UI OVERLAY (Back Button) --- */}
-            <div className="absolute top-4 left-4 z-10">
+        <div className="w-full h-screen bg-[#020617] relative">
+            {/* UI: TOP NAV */}
+            <div className="absolute top-24 left-10 z-50 flex items-center gap-4">
                 <button
-                    onClick={() => router.push('/auditorio')}
-                    className="px-6 py-2 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-white font-bold transition-all border border-white/20"
+                    onClick={() => router.push('/lobby')}
+                    className="flex items-center gap-3 px-6 py-2 bg-white/5 hover:bg-white/10 backdrop-blur-xl border border-white/10 rounded-full text-white font-black text-[10px] uppercase tracking-widest transition-all"
                 >
-                    ← Back to Lobby
+                    ← LOBBY PRINCIPAL
                 </button>
             </div>
 
-            {/* --- MODAL --- */}
-            {selectedSponsor && (
-                <div className="absolute inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={() => setSelectedSponsor(null)}>
-                    <div className="bg-slate-900 border border-slate-700 p-8 rounded-2xl max-w-2xl w-full relative shadow-2xl" onClick={e => e.stopPropagation()}>
-                        <button
-                            className="absolute top-4 right-4 text-slate-400 hover:text-white"
-                            onClick={() => setSelectedSponsor(null)}
-                        >
-                            ✕
-                        </button>
+            <Canvas shadows camera={{ position: [0, CAMERA_HEIGHT, 15], fov: 50 }}>
+                <CameraControls ref={controls} />
+                <Suspense fallback={null}>
+                    <Environment preset="night" />
 
-                        <div className="flex flex-col md:flex-row gap-6">
-                            <div className="w-full md:w-1/2 h-48 rounded-lg shadow-inner" style={{ backgroundColor: selectedSponsor.color }} />
-                            <div>
-                                <h2 className="text-3xl font-bold text-white mb-2">{selectedSponsor.name}</h2>
-                                <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold uppercase mb-4 ${selectedSponsor.tier === 'gold' ? 'bg-amber-500/20 text-amber-400' : 'bg-slate-700 text-slate-300'}`}>
-                                    {selectedSponsor.tier} SPONSOR
-                                </span>
-                                <p className="text-slate-400 text-sm mb-6">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Visita nuestro stand para conocer las últimas novedades tecnológicas.
-                                </p>
-                                <div className="flex gap-3">
-                                    <button className="flex-1 py-2 bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg font-bold transition-colors">
-                                        Descargar Brochure
-                                    </button>
-                                    <button className="flex-1 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-bold transition-colors">
-                                        Chat
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
+                    {/* --- LIGHTING: HIGH TECH --- */}
+                    <ambientLight intensity={0.2} />
+                    <pointLight position={[0, 15, -10]} intensity={2} color="#00f3ff" distance={50} />
+                    <pointLight position={[20, 10, 5]} intensity={1.5} color="#3b82f6" distance={40} />
+                    <pointLight position={[-20, 10, 5]} intensity={1.5} color="#ec4899" distance={40} />
 
-            <Canvas camera={{ position: [0, 10, 30], fov: 50 }} gl={{ toneMapping: THREE.ReinhardToneMapping, toneMappingExposure: 1.2 }}>
+                    {/* Sky Lights */}
+                    <rectAreaLight position={[0, 20, 0]} width={60} height={20} intensity={1} color="#3b82f6" rotation={[-Math.PI / 2, 0, 0]} />
 
-                {/* Controls - Restricted Orbit to feel like a "God View" or "Walk" */}
-                <OrbitControls
-                    maxPolarAngle={Math.PI / 2 - 0.1}
-                    minPolarAngle={Math.PI / 4}
-                    minDistance={10}
-                    maxDistance={60}
-                    enablePan={true}
-                />
+                    {/* --- ARCHITECTURE --- */}
+                    {/* Polished Black Floor with Grid (The 'Beyond' Look) */}
+                    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
+                        <planeGeometry args={[100, 100]} />
+                        {/* @ts-ignore */}
+                        <MeshReflectorMaterial
+                            blur={[300, 100]}
+                            resolution={1024}
+                            mixBlur={1}
+                            mixStrength={50}
+                            roughness={0.15}
+                            depthScale={1.2}
+                            minDepthThreshold={0.4}
+                            maxDepthThreshold={1.4}
+                            color="#020617"
+                            metalness={0.8}
+                        />
+                    </mesh>
 
-                {/* Lighting */}
-                <ambientLight intensity={0.5} />
-                <pointLight position={[0, 20, 0]} intensity={2} color="white" />
-                <directionalLight position={[10, 20, 5]} intensity={1} castShadow />
+                    {/* Electric Floor Grid */}
+                    {[...Array(21)].map((_, i) => (
+                        <group key={i}>
+                            <mesh position={[i * 5 - 50, 0.01, 0]}>
+                                <planeGeometry args={[0.02, 100]} />
+                                <meshBasicMaterial color="#00f3ff" transparent opacity={0.1} />
+                            </mesh>
+                            <mesh position={[0, 0.01, i * 5 - 50]} rotation={[0, Math.PI / 2, 0]}>
+                                <planeGeometry args={[0.02, 100]} />
+                                <meshBasicMaterial color="#00f3ff" transparent opacity={0.1} />
+                            </mesh>
+                        </group>
+                    ))}
 
-                {/* Environment */}
-                <Environment preset="city" />
+                    {/* Tech Ceiling Rings */}
+                    <group position={[0, 25, 0]}>
+                        {[40, 60, 80].map((radius, i) => (
+                            <mesh key={radius} rotation={[Math.PI / 2, 0, 0]} position={[0, -i * 5, 0]}>
+                                <torusGeometry args={[radius, 0.1, 16, 128]} />
+                                <meshBasicMaterial color="#3b82f6" transparent opacity={0.2} />
+                            </mesh>
+                        ))}
+                    </group>
 
-                {/* --- HALL ARCHITECTURE --- */}
-                {/* Floor */}
-                <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.1, 0]}>
-                    <planeGeometry args={[100, 100]} />
-                    <meshStandardMaterial color="#0f172a" roughness={0.2} metalness={0.5} />
-                </mesh>
-                <Grid position={[0, 0.01, 0]} args={[100, 100]} cellColor="#334155" sectionColor="#1e293b" infiniteGrid fadeDistance={60} />
+                    {/* Central Elements */}
+                    <WelcomeDesk />
+                    <ContentPortals />
 
-                {/* --- STANDS --- */}
-                {SPONSORS.map(sponsor => (
-                    <Stand key={sponsor.id} data={sponsor} onClick={setSelectedSponsor} />
-                ))}
+                    {/* --- NAVIGATION PATH --- */}
+                    {[12, 6, 0, -6, -12].map(z => (
+                        <FloorWaypoint key={`p-${z}`} position={[0, 0.05, z]} onClick={setTargetPos} />
+                    ))}
+                    {/* Path to Sides */}
+                    {[6, 12].map(x => (
+                        <FloorWaypoint key={`lx-${x}`} position={[x, 0.05, -3]} onClick={setTargetPos} />
+                    ))}
+                    {[-6, -12].map(x => (
+                        <FloorWaypoint key={`rx-${x}`} position={[x, 0.05, -3]} onClick={setTargetPos} />
+                    ))}
 
-                {/* --- DECOR --- */}
-                {/* Entrance Banner */}
-                <Text
-                    position={[0, 12, -25]}
-                    fontSize={4}
-                    color="#22d3ee"
-                    anchorX="center"
-                    anchorY="middle"
-                    font="/fonts/Inter-Bold.ttf"
-                >
-                    EXPO HALL
-                </Text>
-
-                {/* Post Processing */}
-                <EffectComposer>
-                    <Bloom luminanceThreshold={1} mipmapBlur intensity={0.8} radius={0.5} />
-                    <Vignette eskil={false} offset={0.1} darkness={0.6} />
-                </EffectComposer>
-
+                    {/* Post Processing */}
+                    <EffectComposer>
+                        <Bloom luminanceThreshold={0.5} mipmapBlur intensity={1.2} radius={0.7} />
+                        <Vignette eskil={false} offset={0.1} darkness={0.8} />
+                    </EffectComposer>
+                </Suspense>
             </Canvas>
         </div>
     )

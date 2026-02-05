@@ -19,8 +19,8 @@ export async function login(formData: FormData) {
 
     if (error) {
         console.error("Login error:", error.message)
-        // Send error back to login page
-        redirect('/login?error=Could not authenticate user: ' + error.message)
+        // Send message back to login page
+        redirect('/login?message=Error de autenticación: ' + error.message)
     }
 
     console.log("Login successful, redirecting to /lobby...")
@@ -32,18 +32,29 @@ export async function signup(formData: FormData) {
     console.log("Signup action started...")
     const supabase = await createClient()
 
-    const data = {
-        email: formData.get('email') as string,
-        password: formData.get('password') as string,
-    }
-    console.log("Attempting signup for:", data.email)
+    const email = formData.get('email') as string
+    const password = formData.get('password') as string
+    const first_name = formData.get('first_name') as string
+    const last_name = formData.get('last_name') as string
+    const company = formData.get('company') as string
 
-    // Sign up
-    const { error } = await supabase.auth.signUp(data)
+    console.log("Attempting signup for:", email)
+
+    // Sign up with metadata
+    const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+            data: {
+                full_name: `${first_name} ${last_name}`.trim() || email.split('@')[0],
+                company: company || ''
+            }
+        }
+    })
 
     if (error) {
         console.error("Signup error:", error.message)
-        redirect('/login?error=Could not create user: ' + error.message)
+        redirect('/login?message=Error al crear cuenta: ' + error.message)
     }
 
     console.log("Signup successful. Check email if confirmation is enabled.")
